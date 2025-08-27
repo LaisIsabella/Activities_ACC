@@ -29,3 +29,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Corrigido
 
 ---
+
+## [1.0.0] - 19-08-2025
+
+### Adicionado
+- ACC-2 **MAJOR** Criação do repositório vazio do projeto Registro de Horas atividade por aluno (ACC)
+
+### Alterado
+
+### Corrigido
