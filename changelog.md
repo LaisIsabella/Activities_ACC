@@ -10,7 +10,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Adicionado
 
 ### Alterado
-- ACC-2 **PATCH** Correção do changelog
+- ACC-2 **PATCH** Estruturação do changelog
 
 ### Corrigido
 
