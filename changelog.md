@@ -22,6 +22,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - ACC-2 **MAJOR** Estruturação dos diretórios (Analise, Codigo, Gerencia, SQA)
 - ACC-2 **MINOR** Adição de arquivos placeholder para manter a estrutura de diretórios
 - ACC-5 **MINOR** Adição do Documento de Requisitos V1
+- ACC-6 **MINOR** Adição do Relatório de Defeitos V1
 
 ### Alterado
 
