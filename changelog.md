@@ -8,7 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [2.2.1] - 26-08-2025
 
 ### Adicionado
-- ACC-7 **MAJOR** Adição do Documento de requisitos refatorado
+- ACC-7 **MINOR** Adição do Documento de requisitos refatorado
 
 ### Alterado
 
@@ -60,4 +60,5 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
 
