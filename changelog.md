@@ -6,6 +6,16 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ======
+## [2.3.1] - 20-09-2025
+
+### Adicionado
+- ACC-4 **PATCH** Adição da rede de tarefas
+
+### Alterado
+
+### Corrigido
+
+---
 
 ## [2.3.0] - 19-09-2025
 
