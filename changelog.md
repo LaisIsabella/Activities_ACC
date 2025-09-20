@@ -5,10 +5,24 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+======
+
 ## [2.3.0] - 19-09-2025
 
 ### Adicionado
 - ACC-11 **MINOR** Adição do Relatório de Defeitos (Caso de Uso Expandido)
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [2.2.3] - 18-09-2025
+
+### Adicionado
+- ACC-22 **MINOR** Adição do Documento .astah com Diagrama de Caso de Uso Expandido
+
 ### Alterado
 
 ### Corrigido
@@ -81,5 +95,6 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
 
 
