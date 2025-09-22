@@ -5,7 +5,6 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-======
 ## [2.3.3] - 20-09-2025
 
 ### Adicionado
@@ -13,6 +12,13 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Alterado
 - ACC-23 **MINOR** Mudança do nome do arquivo .astah para se tornar global
+=======
+## [2.3.2] - 21-09-2025
+
+### Adicionado
+- ACC-12 **MINOR** Adição do Relatório de Caso de uso Expandido refatoriado
+
+### Alterado
 
 ### Corrigido
 
