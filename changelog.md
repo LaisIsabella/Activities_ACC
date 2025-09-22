@@ -5,6 +5,11 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.4] - 22-09-2025
+
+### Adicionado
+- ACC-24 **MINOR** Criação das classes iniciais
+
 ## [2.3.3] - 20-09-2025
 
 ### Adicionado
