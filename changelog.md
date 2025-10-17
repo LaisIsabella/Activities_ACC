@@ -8,6 +8,19 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [2.6.0] - 22-09-2025
 
 ### Adicionado
+- ACC-35 **MINOR** Adicionado diagrama de sequencia CE01
+- ACC-35 **MINOR** Adicionado diagrama de colaboração CE01
+- ACC-35 **MINOR** Adicionado diagrama de classes CE01
+
+### Alterado
+
+### Corrigido
+
+--
+
+## [2.6.0] - 22-09-2025
+
+### Adicionado
 - ACC-24 **MINOR** Criação das classes iniciais
 
 ### Alterado
@@ -138,6 +151,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
 
 
 
