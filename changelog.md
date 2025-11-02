@@ -5,6 +5,19 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 22-09-2025
+
+### Adicionado
+- ACC-39 **MINOR** Criação dos diagramas de sequencia e colaboração de registro e login de todos os tipos de usuarios
+
+### Alterado
+- ACC-39 **MINOR** Atualização do Diagrama de Classes
+- ACC-39 **MINOR** Atualização dos Documentos de Caso de Uso Expandidos e de Requisitos
+
+### Corrigido
+
+--
+
 ## [2.6.0] - 22-09-2025
 
 ### Adicionado
