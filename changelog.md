@@ -8,7 +8,33 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [2.8.0] - 16-10-2025
 ### Adicionado
 - ACC-49 **MINOR** Adição do SQA dos diagramas de classe e do modelo conceitual
-  
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [2.7.0] - 22-09-2025
+
+### Adicionado
+- ACC-39 **MINOR** Criação dos diagramas de sequencia e colaboração de registro e login de todos os tipos de usuarios
+
+### Alterado
+- ACC-39 **MINOR** Atualização do Diagrama de Classes
+- ACC-39 **MINOR** Atualização dos Documentos de Caso de Uso Expandidos e de Requisitos
+
+### Corrigido
+
+--
+
+## [2.6.0] - 22-09-2025
+
+### Adicionado
+- ACC-35 **MINOR** Adicionado diagrama de sequencia CE01
+- ACC-35 **MINOR** Adicionado diagrama de colaboração CE01
+- ACC-35 **MINOR** Adicionado diagrama de classes CE01
+
 ### Alterado
 
 ### Corrigido
@@ -148,10 +174,3 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
-
-
-
-
-
-
-
