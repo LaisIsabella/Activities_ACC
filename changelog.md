@@ -5,6 +5,16 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.1] - 03-11-2025
+### Adicionado
+- ACC-51 **PATCH** Rede de tarefas atualizada
+
+### Alterado
+
+### Corrigido
+
+---
+
 ## [2.8.0] - 16-10-2025
 ### Adicionado
 - ACC-49 **MINOR** Adição do SQA dos diagramas de classe e do modelo conceitual
@@ -174,3 +184,4 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
