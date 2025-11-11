@@ -7,7 +7,17 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [3.0.1] - 03-11-2025
 ### Adicionado
-- ACC-51 ** PATCH** Atualizado rede de tarefas e gráfico de gantt
+- ACC-50 **MINOR** Adicionado interface para registro e autenticação de usuários
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [3.0.1] - 03-11-2025
+### Adicionado
+- ACC-51 **PATCH** Atualizado rede de tarefas e gráfico de gantt
 
 ### Alterado
 
@@ -17,7 +27,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [3.0.0] - 03-11-2025
 ### Adicionado
-- ACC-50 ** MAJOR** Adição do código referente ao registro e autenticação de usuários
+- ACC-50 **MAJOR** Adição do código referente ao registro e autenticação de usuários
 
 ### Alterado
 
