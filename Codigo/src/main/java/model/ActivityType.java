@@ -1,7 +1,7 @@
 package model;
 
-
 public class ActivityType {
+
     private String name;
     private int limit;
 
@@ -10,10 +10,20 @@ public class ActivityType {
         this.limit = limit;
     }
 
-    // Getters e Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public int getLimit() { return limit; }
-    public void setLimit(int limit) { this.limit = limit; }
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (limite: " + limit + ")";
+    }
 }

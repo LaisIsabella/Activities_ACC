@@ -5,6 +5,23 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [2.8.4] - 16-11-2025
+### Adicionado
+- ACC-65 **PATCH** Codificação - Caso de uso 11&12
+
+### Alterado
+
+### Corrigido
+
+## [2.8.3] - 16-11-2025
+### Adicionado
+- ACC-61 **PATCH** Codificação - Caso de uso 8 - Configurar limite de hora
+
+### Alterado
+
+### Corrigido
+
 ## [2.8.2] - 03-11-2025
 ### Adicionado
 - ACC-52 **MINOR** Diagrama de Sequencia UC-8
