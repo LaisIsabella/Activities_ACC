@@ -1,6 +1,5 @@
 package model;
 
-
 import java.util.Date;
 
 public class Activity {
@@ -8,41 +7,115 @@ public class Activity {
     private String description;
     private Date date;
     private int hours;
-    private String status;
+    private Status status;
     private String response;
 
-    private ActivityType type;   // associação com ActivityType
+    private ActivityType activityType;
+    private Student student;
 
-    public Activity(String name, String description, Date date, int hours, 
-                    String status, String response, ActivityType type) {
+    private Document document;
+
+    public Activity() {
+    }
+
+    public Activity(String name, String description, Date date, int hours,
+                    Status status, String response,
+                    ActivityType activityType, Student student,
+                    Document document) {
+
         this.name = name;
         this.description = description;
         this.date = date;
         this.hours = hours;
         this.status = status;
         this.response = response;
-        this.type = type;
+        this.activityType = activityType;
+        this.student = student;
+        this.document = document;
+    }
+    
+    public Document getDocument() {
+        return document;
+    }
+     
+    public void setDocument(Document document){
+        this.document = document;
+    }
+    
+    public Student getStudent() {
+        return student;
+    }
+    
+     public String getStudentEmail() {
+        return (student != null ? student.getEmail() : "");
+    }
+    
+    public void setStudent(Student student){
+        this.student = student;
+    }
+    
+    public ActivityType getActivityType() {
+        return activityType;
+    }
+    
+    public void setActivityType(ActivityType activityType){
+        this.activityType = activityType;
+    }
+    
+    public Status getStatus() {
+        return status;
+    }
+    
+    public void setStatus(Status status){
+        this.status = status;
     }
 
-    // Getters e Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getName() {
+        return name;
+    }
 
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getHours() { return hours; }
-    public void setHours(int hours) { this.hours = hours; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getResponse() { return response; }
-    public void setResponse(String response) { this.response = response; }
+    public Date getDate() {
+        return date;
+    }
 
-    public ActivityType getType() { return type; }
-    public void setType(ActivityType type) { this.type = type; }
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+   @Override
+    public String toString() {
+        return name + " (" + status + ")";
+    }
+    
+    
 }
