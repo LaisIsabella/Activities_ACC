@@ -5,6 +5,11 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.3] - 17-11-2025
+### Adicionado
+- ACC-62 **MINOR** Relatorio de de defeitos Diagrama de Classes
+- ACC-62 **MINOR** Relatorio de de defeitos Codigo Fonte
+
 ## [2.8.2] - 03-11-2025
 ### Adicionado
 - ACC-52 **MINOR** Diagrama de Sequencia UC-8
