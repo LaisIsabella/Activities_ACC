@@ -5,6 +5,36 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.2] - 03-11-2025
+### Adicionado
+- ACC-50 **MINOR** Adicionado interface para registro e autenticação de usuários
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [3.0.1] - 03-11-2025
+### Adicionado
+- ACC-51 **PATCH** Atualizado rede de tarefas e gráfico de gantt
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [3.0.0] - 03-11-2025
+### Adicionado
+- ACC-50 **MAJOR** Adição do código referente ao registro e autenticação de usuários
+
+### Alterado
+
+### Corrigido
+
+---
+
 ## [2.8.2] - 03-11-2025
 ### Adicionado
 - ACC-52 **MINOR** Diagrama de Sequencia UC-8
@@ -200,5 +230,3 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
-
-
