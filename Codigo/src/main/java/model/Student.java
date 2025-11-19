@@ -1,19 +1,31 @@
 package model;
 
 public class Student extends User {
-    private int cpf;
+    private String cpf;
     private int ra;
 
-    public Student(String name, String email, String password, int cpf, int ra) {
+    public Student() {
+    }
+
+    public Student(String name, String email, String password, String cpf, int ra) {
         super(name, email, password);
         this.cpf = cpf;
         this.ra = ra;
     }
 
-    // Getters e Setters
-    public int getCpf() { return cpf; }
-    public void setCpf(int cpf) { this.cpf = cpf; }
+    public String getCpf() {
+        return cpf;
+    }
 
-    public int getRa() { return ra; }
-    public void setRa(int ra) { this.ra = ra; }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public int getRa() {
+        return ra;
+    }
+
+    public void setRa(int ra) {
+        this.ra = ra;
+    }
 }
