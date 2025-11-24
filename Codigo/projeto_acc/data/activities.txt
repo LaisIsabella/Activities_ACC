@@ -1,0 +1,8 @@
+isa@unesp.br;Pesquisa sobre ética em IA;ética em IA;20/11/2025;120;DENIED;Documento invalido;Pesquisa;acc.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763592565093_acc.pdf;false
+isa@unesp.br;Monitoria em Estrutura de Dados;Monitoria em Estrutura de Dados;20/11/2025;5;DENIED;Compravente Corrompido;Monitoria;.acc.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763592664455_.acc.pdf;false
+ana@unesp.br;Curso de Python;Curso de Python;20/12/2025;16;DENIED;Documento iválido;Curso Extra;acc1.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763592866885_acc1.pdf;false
+ana@unesp.br;Conhecer Data Ceter ;Visita técnica ao Data Center da Universidade;25/11/2025;4;PENDING;;Visita Tecnica;acc2.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763592921289_acc2.pdf;true
+isa@unesp.br;Pesquisa de Campo;Pesquisar sobre as empresas de ti;21/11/2025;60;PENDING;;Pesquisa;file.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763608781077_file.pdf;true
+ana@unesp.br;Pesquisa sobre mulheres na TI;Pesquisa sobre mulheres na TI;25/12/2025;60;PENDING;;Pesquisa;file.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763608874231_file.pdf;true
+carol@unesp.br;Curso de Java;Curso de Java;20/12/2025;100;APPROVED;Horas aprovadas: 100;Pesquisa;file.pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763621534819_file.pdf;false
+carol@unesp.br;Visita a Cob+;Visita a Cob+, empresa de ti;22/11/2025;5;PENDING;;Visita Tecnica;file (1).pdf;C:\Users\Vericoders\Desktop\projeto_acc\projeto_acc\attachments\1763667831380_file (1).pdf;true
