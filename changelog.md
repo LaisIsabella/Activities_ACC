@@ -5,6 +5,26 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.5] - 25-11-2025
+### Adicionado
+- ACC-67 **MINOR** Diagrama de Sequencia UC-13
+- ACC-67 **MINOR** Diagrama de Colaboração UC-13
+- ACC-67 **MINOR** Diagrama de Sequencia UC-14
+- ACC-67 **MINOR** Diagrama de Colaboração UC-14
+- ACC-67 **MINOR** Diagrama de Sequencia UC-15
+- ACC-67 **MINOR** Diagrama de Colaboração UC-15
+- ACC-67 **MINOR** Diagrama de Sequencia UC-16
+- ACC-67 **MINOR** Diagrama de Colaboração UC-16
+- ACC-67 **MINOR** Diagrama de Sequencia UC-20
+- ACC-67 **MINOR** Diagrama de Colaboração UC-20
+
+### Alterado
+- ACC-67 **PATCH** Diagrama de Classes atualizado
+
+### Corrigido
+
+---
+
 ## [3.0.4] - 17-11-2025
 ### Adicionado
 - ACC-62 **MINOR** Relatorio de de defeitos Diagrama de Classes
@@ -262,3 +282,4 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
