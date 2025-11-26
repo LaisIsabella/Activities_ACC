@@ -6,14 +6,18 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [3.0.4] - 16-11-2025
+## [3.0.4] - 17-11-2025
 ### Adicionado
-- ACC-61 **PATCH** Codificação - Caso de uso 8 - Configurar limite de hora
+- ACC-62 **MINOR** Relatorio de de defeitos Diagrama de Classes
+- ACC-62 **MINOR** Relatorio de de defeitos Codigo Fonte
 
 ### Alterado
 
 ### Corrigido
-
+---
+## [3.0.4] - 16-11-2025
+### Adicionado
+- ACC-61 **PATCH** Codificação - Caso de uso 8 - Configurar limite de hora
 ---
 
 ## [3.0.3] - 15-11-2025
