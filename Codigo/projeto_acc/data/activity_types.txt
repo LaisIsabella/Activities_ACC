@@ -1,5 +1,5 @@
 Pesquisa;120
-Extensão;120
+Extensão;100
 Ensino;120
 Monitoria;20
 Visita Tecnica;40

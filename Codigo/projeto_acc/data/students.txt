@@ -1,3 +1,4 @@
 Ana;ana@unesp.br;Senha123!;98765432100;1001
 Isa;isa@unesp.br;Senha123!;12365498700;5001
 Carol;carol@unesp.br;Senha123!;65498732100;4001
+laal;carol@unesp.br;Senha123!;98754321000;1001

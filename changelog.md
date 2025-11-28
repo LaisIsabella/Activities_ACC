@@ -5,7 +5,17 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.4] - 24-11-2025
+## [3.0.6] - 28-11-2025
+### Adicionado
+- ACC-68 **MINOR** Implementação dos casos de uso 13,14,20
+
+### Alterado
+
+### Corrigido
+
+---
+
+## [3.0.5] - 24-11-2025
 ### Adicionado
 - ACC-68 **MINOR** Implementação dos casos de uso 4, 5, 6, 7, 19
 

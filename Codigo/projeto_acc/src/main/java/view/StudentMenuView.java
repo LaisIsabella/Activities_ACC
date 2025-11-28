@@ -29,6 +29,7 @@ public class StudentMenuView extends JFrame {
         setLayout(new GridLayout(4, 1, 10, 10));
 
         JButton btnAdd = new JButton("Adicionar Atividade");
+        JButton btnViewLimits = new JButton("Limites de Horas");
         JButton btnHistory = new JButton("Histórico de Atividades");
         JButton btnMessages = new JButton("Caixa de Mensagens");
         JButton btnExit = new JButton("Sair");
@@ -36,11 +37,13 @@ public class StudentMenuView extends JFrame {
         btnAdd.addActionListener(e
                 -> new AddActivityView(student, activityController, activityTypes));
 
-        btnHistory.addActionListener(e -> {
-            List<Activity> mine = activityController.getByStudent(student);
-            new DeleteActivityView(student, activityController, mine);
-        });
+        btnViewLimits.addActionListener(e
+                -> new StudentHourLimitsView()
+        );
 
+        btnHistory.addActionListener(e
+                -> new StudentHistoryView(student, activityController)
+        );
         btnMessages.addActionListener(e -> {
             StringBuilder sb = new StringBuilder();
             for (String m : student.getMessages()) {
@@ -55,6 +58,7 @@ public class StudentMenuView extends JFrame {
         btnExit.addActionListener(e -> dispose());
 
         add(btnAdd);
+        add(btnViewLimits);
         add(btnHistory);
         add(btnMessages);
         add(btnExit);

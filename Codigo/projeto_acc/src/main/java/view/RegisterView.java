@@ -61,25 +61,47 @@ public class RegisterView extends JFrame {
 
             try {
                 switch (userType) {
-
                     case "coordinator" -> {
                         int rc = Integer.parseInt(extra1);
                         success = cc.createCoordinator(name, email, password, rc);
                     }
 
                     case "supervisor" -> {
+                        if (sc.getSupervisorCatalog().findSupervisorByEmail(email) != null) {
+                            JOptionPane.showMessageDialog(this, "Já existe um supervisor com esse e-mail.");
+                            return;
+                        }
                         success = sc.createSupervisor(name, email, password, extra1);
                     }
 
                     case "student" -> {
                         String cpf = extra1;
                         int ra = Integer.parseInt(extra2);
-                        if (!stc.validateStudent(name, email, password, cpf, ra)) {
-                            JOptionPane.showMessageDialog(this,
-                                "Dados inválidos. Verifique nome, e-mail, senha, CPF (11 dígitos) e RA (1000–9999).",
-                                "Erro", JOptionPane.ERROR_MESSAGE);
+
+                        // VERIFICAÇÃO DE DUPLICIDADE
+                        if (stc.getStudentCatalog().findStudentByEmail(email) != null) {
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse e-mail.");
                             return;
                         }
+                        if (stc.getStudentCatalog().getStudents().stream()
+                                .anyMatch(s -> s.getCpf().equals(cpf))) {
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse CPF.");
+                            return;
+                        }
+                        if (stc.getStudentCatalog().getStudents().stream()
+                                .anyMatch(s -> s.getRa() == ra)) {
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse RA.");
+                            return;
+                        }
+
+                        // VALIDA FORMATO DOS DADOS
+                        if (!stc.validateStudent(name, email, password, cpf, ra)) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Dados inválidos. Verifique nome, e-mail, senha, CPF (11 dígitos) e RA (1000–9999).",
+                                    "Erro", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
                         success = stc.createStudent(name, email, password, cpf, ra);
                     }
                 }
@@ -93,10 +115,11 @@ public class RegisterView extends JFrame {
 
             if (!success) {
                 JOptionPane.showMessageDialog(this,
-                    "Credenciais inválidas ou usuário não encontrado.",
-                    "Erro de Login",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Credenciais inválidas ou usuário não encontrado.",
+                        "Erro de Login",
+                        JOptionPane.ERROR_MESSAGE);
             }
+
             JOptionPane.showMessageDialog(this,
                     success ? "Cadastro realizado com sucesso!" : "Falha no cadastro!");
         });
@@ -104,12 +127,18 @@ public class RegisterView extends JFrame {
         btnCancel.addActionListener(e -> dispose());
 
         // Construção da interface
-        add(lblName); add(txtName);
-        add(lblEmail); add(txtEmail);
-        add(lblPassword); add(txtPassword);
-        add(lblExtra1); add(txtExtra1);
-        add(lblExtra2); add(txtExtra2);
-        add(btnRegister); add(btnCancel);
+        add(lblName);
+        add(txtName);
+        add(lblEmail);
+        add(txtEmail);
+        add(lblPassword);
+        add(txtPassword);
+        add(lblExtra1);
+        add(txtExtra1);
+        add(lblExtra2);
+        add(txtExtra2);
+        add(btnRegister);
+        add(btnCancel);
 
         setVisible(true);
     }

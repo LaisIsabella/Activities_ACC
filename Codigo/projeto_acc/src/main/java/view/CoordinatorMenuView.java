@@ -26,7 +26,7 @@ public class CoordinatorMenuView extends JFrame {
         setLayout(new GridLayout(4, 1, 10, 10));
 
         JButton btnConfigLimits = new JButton("Configurar Limites de Horas");
-        JButton btnManageActivities = new JButton("Gerenciar Atividades");
+        JButton btnManageActivities = new JButton("Buscar Atividades");
         JButton btnLogout = new JButton("Sair");
 
         add(btnConfigLimits);
