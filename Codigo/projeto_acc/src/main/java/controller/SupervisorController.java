@@ -63,7 +63,7 @@ public class SupervisorController {
     }
 
     // Cria um novo supervisor e adiciona ao catálogo
-    public boolean createSupervisor(String name, String email, String password, String cpf) {
+    public boolean createSupervisor(String name, String email, String password, String cpf) {//should be name, email, password and rc
         // 1. Valida os dados do supervisor
         boolean validData = validateSupervisor(name, email, password, cpf);
 

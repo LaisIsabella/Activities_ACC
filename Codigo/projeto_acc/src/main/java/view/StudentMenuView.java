@@ -24,14 +24,15 @@ public class StudentMenuView extends JFrame {
         this.activityTypes = activityTypes;
 
         setTitle("Menu do Aluno - " + student.getName());
-        setSize(400, 300);
+        setSize(400, 350);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(4, 1, 10, 10));
+        setLayout(new GridLayout(6, 1, 10, 10));
 
         JButton btnAdd = new JButton("Adicionar Atividade");
         JButton btnViewLimits = new JButton("Limites de Horas");
         JButton btnHistory = new JButton("Histórico de Atividades");
         JButton btnMessages = new JButton("Caixa de Mensagens");
+        JButton btnGenerateReport = new JButton("Gerar Relatório");
         JButton btnExit = new JButton("Sair");
 
         btnAdd.addActionListener(e
@@ -44,6 +45,7 @@ public class StudentMenuView extends JFrame {
         btnHistory.addActionListener(e
                 -> new StudentHistoryView(student, activityController)
         );
+        
         btnMessages.addActionListener(e -> {
             StringBuilder sb = new StringBuilder();
             for (String m : student.getMessages()) {
@@ -55,12 +57,17 @@ public class StudentMenuView extends JFrame {
             JOptionPane.showMessageDialog(null, sb.toString(), "Mensagens", JOptionPane.INFORMATION_MESSAGE);
         });
 
+        btnGenerateReport.addActionListener(e
+                -> new GenerateReportView(student, activityController)
+        );
+
         btnExit.addActionListener(e -> dispose());
 
         add(btnAdd);
         add(btnViewLimits);
         add(btnHistory);
         add(btnMessages);
+        add(btnGenerateReport);
         add(btnExit);
 
         setVisible(true);

@@ -12,12 +12,12 @@ public class CoordinatorCatalog {
     private final List<Coordinator> coordinators;
 
     public CoordinatorCatalog() {
-        this.repo = new CoordinatorRepository();
+        this.repo = new CoordinatorRepository();    
         this.coordinators = repo.loadAll(); // CARREGA DO ARQUIVO
     }
 
-    public boolean addCoordinator(Coordinator c) {
-        boolean added = coordinators.add(c);
+    public boolean addCoordinator(Coordinator coordinator) {
+        boolean added = coordinators.add(coordinator);
         if (added) {
             repo.saveAll(coordinators); // SALVA AUTOMATICAMENTE
         }

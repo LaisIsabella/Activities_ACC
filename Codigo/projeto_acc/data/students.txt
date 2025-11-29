@@ -2,3 +2,5 @@ Ana;ana@unesp.br;Senha123!;98765432100;1001
 Isa;isa@unesp.br;Senha123!;12365498700;5001
 Carol;carol@unesp.br;Senha123!;65498732100;4001
 laal;carol@unesp.br;Senha123!;98754321000;1001
+Lais;lais.isabella@unesp.br;Lais1234;44711266879;221253041
+junior santos;p.santos-junior@unesp.br;junior123;44758750807;231254024

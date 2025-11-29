@@ -5,6 +5,8 @@ import model.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import util.EmailUtil;
+import util.PDFUtil;
 
 public class ActivityController {
 
@@ -77,7 +79,7 @@ public class ActivityController {
         return student != null;
     }
 
-    public List<Activity> searchFilteredActivities(Student student, Status status, ActivityType type, boolean isVerified) {
+    public List<Activity> searchFilteredActivities(Student student, Status status, ActivityType type, Boolean isVerified) {
         List<Activity> result = new ArrayList<>();
 
         for (Activity a : activityCatalog.listActivities()) {
@@ -90,7 +92,7 @@ public class ActivityController {
             if (type != null && !a.getActivityType().getName().equalsIgnoreCase(type.getName())) {
                 continue;
             }
-            if (isVerified && !a.getIsVerified()) {
+            if (isVerified != null && a.getIsVerified() != isVerified) {
                 continue;
             }
             result.add(a);
@@ -127,32 +129,56 @@ public class ActivityController {
     // ============================
     public boolean denyActivity(Activity activity, String response) {
 
-        if (activity.getStatus() != Status.PENDING) {
-            throw new IllegalArgumentException("Atividade já foi avaliada.");
-        }
-
-        if (response == null || response.isBlank()) {
-            throw new IllegalArgumentException("Justificativa é obrigatória.");
-        }
-
-        return activityCatalog.updateActivity(activity, Status.DENIED, response);
+    if (activity.getStatus() != Status.PENDING) {
+        throw new IllegalArgumentException("Atividade já foi avaliada.");
     }
+
+    if (response == null || response.isBlank()) {
+        throw new IllegalArgumentException("Justificativa é obrigatória.");
+    }
+
+    boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
+    
+    // ✅ CE16 - Envia email de notificação
+    if (updated && activity.getStudent() != null) {
+        EmailUtil.sendActivityDeniedEmail(
+            activity.getStudent().getEmail(),
+            activity.getStudent().getName(),
+            activity.getName(),
+            response
+        );
+    }
+    
+    return updated;
+}
 
     // ============================
     // CE06 – NEGAR PARCIALMENTE
     // ============================
     public boolean partiallyDenyActivity(Activity activity, String response) {
 
-        if (activity.getStatus() != Status.PENDING) {
-            throw new IllegalArgumentException("Atividade já foi avaliada.");
-        }
-
-        if (response == null || response.isBlank()) {
-            throw new IllegalArgumentException("Descreva os ajustes necessários.");
-        }
-
-        return activityCatalog.updateActivity(activity, Status.PARTIALLY_DENIED, response);
+    if (activity.getStatus() != Status.PENDING) {
+        throw new IllegalArgumentException("Atividade já foi avaliada.");
     }
+
+    if (response == null || response.isBlank()) {
+        throw new IllegalArgumentException("Descreva os ajustes necessários.");
+    }
+
+    boolean updated = activityCatalog.updateActivity(activity, Status.PARTIALLY_DENIED, response);
+    
+    // ✅ CE16 - Envia email de notificação
+    if (updated && activity.getStudent() != null) {
+        EmailUtil.sendActivityPartiallyDeniedEmail(
+            activity.getStudent().getEmail(),
+            activity.getStudent().getName(),
+            activity.getName(),
+            response
+        );
+    }
+    
+    return updated;
+}
 
     // ============================
     // CE07 – APROVAR ATIVIDADE
@@ -163,7 +189,6 @@ public class ActivityController {
             throw new IllegalArgumentException("Atividade já foi avaliada.");
         }
 
-        // aplica limite automaticamente
         int limit = activity.getActivityType().getLimit();
         if (approvedHours > limit) {
             approvedHours = limit;
@@ -171,7 +196,19 @@ public class ActivityController {
 
         activity.setHours(approvedHours);
 
-        return activityCatalog.updateActivity(activity, Status.APPROVED, "Horas aprovadas: " + approvedHours);
+        boolean updated = activityCatalog.updateActivity(activity, Status.APPROVED, "Horas aprovadas: " + approvedHours);
+
+        // ✅ CE16 - Envia email de notificação
+        if (updated && activity.getStudent() != null) {
+            EmailUtil.sendActivityApprovedEmail(
+                    activity.getStudent().getEmail(),
+                    activity.getStudent().getName(),
+                    activity.getName(),
+                    approvedHours
+            );
+        }
+
+        return updated;
     }
 
     public boolean verifyActivity(Activity activity) {
@@ -195,6 +232,19 @@ public class ActivityController {
             }
         }
         return result;
+    }
+
+    public List<Activity> getAllStudentApprovedActivities(Student student) {
+        return activityCatalog.getAllStudentApprovedActivities(student);
+    }
+
+    public boolean generateUserReport(String path, List<Activity> activities) {
+        try {
+            return PDFUtil.generateUserReport(path, activities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

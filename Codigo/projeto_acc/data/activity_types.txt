@@ -3,4 +3,4 @@ Extensão;100
 Ensino;120
 Monitoria;20
 Visita Tecnica;40
-Curso Extra;120
+Curso Extra;10

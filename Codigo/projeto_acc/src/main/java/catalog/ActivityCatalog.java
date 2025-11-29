@@ -74,7 +74,7 @@ public class ActivityCatalog {
         return true;
     }
 
-    public List<Activity> findForApproval() {
+    public List<Activity> findForApproval() {//esse metodo recebe por parametro Activitie
         List<Activity> result = new ArrayList<>();
 
         for (Activity a : activities) {
@@ -96,6 +96,25 @@ public class ActivityCatalog {
 
     public void save() {
         repo.saveAll(activities);
+    }
+
+    public List<Activity> getAllStudentApprovedActivities(Student student) {
+        List<Activity> result = new ArrayList<>();
+
+        if (student == null) {
+            return result;
+        }
+
+        for (Activity a : activities) {
+            // Verifica se a atividade pertence ao estudante E está aprovada
+            if (a.getStudent() != null
+                    && a.getStudent().getEmail().equalsIgnoreCase(student.getEmail())
+                    && a.getStatus() == Status.APPROVED) {
+                result.add(a);
+            }
+        }
+
+        return result;
     }
 
 }

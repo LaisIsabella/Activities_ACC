@@ -1,1 +1,2 @@
 Celso;celso@unesp.br;Senha123!;32165498700
+supervisor;supervisor@unesp.br;supervisor;31357428812
