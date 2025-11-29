@@ -33,7 +33,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
-
+---
+## [3.0.4] - 16-11-2025
+### Adicionado
+- ACC-61 **PATCH** Codificação - Caso de uso 8 - Configurar limite de hora
 ---
 
 ## [3.0.3] - 15-11-2025

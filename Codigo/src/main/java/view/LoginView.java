@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import controller.*;
+import model.Student;
 
 public class LoginView extends JFrame {
 
@@ -21,17 +22,42 @@ public class LoginView extends JFrame {
         JButton btnLogin = new JButton("Entrar");
         JButton btnRegister = new JButton("Cadastrar");
 
-        btnLogin.addActionListener(e -> {
-            String email = txtEmail.getText();
-            String password = new String(txtPassword.getPassword());
-            boolean success = false;
+       btnLogin.addActionListener(e -> {
+        String email = txtEmail.getText();
+        String password = new String(txtPassword.getPassword());
+        boolean success = false;
 
-            if (userType.equals("coordinator")) success = cc.loginCoordinator(email, password);
-            else if (userType.equals("supervisor")) success = sc.loginSupervisor(email, password);
-            else if (userType.equals("student")) success = stc.loginStudent(email, password);
+        if (userType.equals("coordinator")) {
+            success = cc.loginCoordinator(email, password);
+            if (success) {
+                new CoordinatorMenuView();
+                dispose();
+                return;
+            }
+        }
 
-            JOptionPane.showMessageDialog(this, success ? "Login bem-sucedido!" : "Falha no login!");
-        });
+        else if (userType.equals("supervisor")) {
+            success = sc.loginSupervisor(email, password);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Menu de Supervisor ainda não implementado.");
+                dispose();
+                return;
+            }
+        }
+
+        else if (userType.equals("student")) {
+            success = stc.loginStudent(email, password);
+
+            if (success) {
+                Student logged = stc.findStudentByEmail(email);
+                new StudentMenuView(logged);
+                dispose();
+                return;
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, "Falha no login!");
+    });
 
         btnRegister.addActionListener(e -> new RegisterView(userType, cc, sc, stc));
 
