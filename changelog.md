@@ -15,13 +15,30 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+### Alterado
+## [3.0.5] - 25-11-2025
+### Adicionado
+- ACC-67 **MINOR** Diagrama de Sequencia UC-13
+- ACC-67 **MINOR** Diagrama de Colaboração UC-13
+- ACC-67 **MINOR** Diagrama de Sequencia UC-14
+- ACC-67 **MINOR** Diagrama de Colaboração UC-14
+- ACC-67 **MINOR** Diagrama de Sequencia UC-15
+- ACC-67 **MINOR** Diagrama de Colaboração UC-15
+- ACC-67 **MINOR** Diagrama de Sequencia UC-16
+- ACC-67 **MINOR** Diagrama de Colaboração UC-16
+- ACC-67 **MINOR** Diagrama de Sequencia UC-20
+- ACC-67 **MINOR** Diagrama de Colaboração UC-20
+
+### Alterado
+- ACC-67 **PATCH** Diagrama de Classes atualizado
+
+### Corrigido
+
+---
+
 ## [3.0.5] - 24-11-2025
 ### Adicionado
 - ACC-68 **MINOR** Implementação dos casos de uso 4, 5, 6, 7, 19
-
-### Alterado
-
-### Corrigido
 
 ---
 
@@ -33,7 +50,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
-
+---
+## [3.0.4] - 16-11-2025
+### Adicionado
+- ACC-61 **PATCH** Codificação - Caso de uso 8 - Configurar limite de hora
 ---
 
 ## [3.0.3] - 15-11-2025
@@ -282,3 +302,4 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Alterado
 
 ### Corrigido
+
