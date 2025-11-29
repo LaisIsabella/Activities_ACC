@@ -138,16 +138,36 @@ public class EmailUtil {
     }
 
     /**
-     * Envia email de notificação de atividade negada
+     * Envia email de notificação de atividade negada (pelo Coordenador)
      */
     public static boolean sendActivityDeniedEmail(String studentEmail, String studentName, 
                                                    String activityName, String reason) {
         String subject = "Atividade Negada - Sistema ACC";
         String body = "Olá " + studentName + ",\n\n" +
-                     "Infelizmente sua atividade complementar foi NEGADA.\n\n" +
+                     "Infelizmente sua atividade complementar foi NEGADA pelo Coordenador.\n\n" +
                      "Atividade: " + activityName + "\n" +
                      "Motivo: " + reason + "\n\n" +
                      "Você pode submeter uma nova atividade corrigindo os problemas apontados.\n\n" +
+                     "Atenciosamente,\n" +
+                     "Sistema de Atividades Complementares - UNESP";
+        
+        return sendEmail(studentEmail, subject, body);
+    }
+
+    /**
+     * ✅ NOVO: Envia email de notificação de atividade negada pelo SUPERVISOR
+     */
+    public static boolean sendActivityDeniedBySupervisorEmail(String studentEmail, String studentName, 
+                                                               String activityName, String reason) {
+        String subject = "Atividade Negada na Validação - Sistema ACC";
+        String body = "Olá " + studentName + ",\n\n" +
+                     "Sua atividade complementar foi NEGADA pelo Supervisor durante a validação.\n\n" +
+                     "Atividade: " + activityName + "\n" +
+                     "Motivo da negação: " + reason + "\n\n" +
+                     "O supervisor identificou problemas que impedem o encaminhamento desta atividade " +
+                     "para aprovação do coordenador.\n\n" +
+                     "Você pode submeter uma nova atividade corrigindo os problemas apontados.\n\n" +
+                     "Observação: Esta atividade não chegou à etapa de avaliação do coordenador.\n\n" +
                      "Atenciosamente,\n" +
                      "Sistema de Atividades Complementares - UNESP";
         

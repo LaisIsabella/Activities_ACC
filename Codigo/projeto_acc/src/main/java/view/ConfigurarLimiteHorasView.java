@@ -36,8 +36,8 @@ public class ConfigurarLimiteHorasView extends JFrame {
         JPanel formPanel = new JPanel();
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(30, 40, 30, 40),
-            BorderFactory.createLineBorder(new Color(220, 220, 220), 1)
+                BorderFactory.createEmptyBorder(30, 40, 30, 40),
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1)
         ));
         formPanel.setLayout(new GridBagLayout());
 
@@ -73,11 +73,11 @@ public class ConfigurarLimiteHorasView extends JFrame {
         JPanel infoPanel = new JPanel(new BorderLayout(10, 0));
         infoPanel.setOpaque(false);
         infoPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(5, 0, 0, 0),
-            BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(52, 152, 219), 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-            )
+                BorderFactory.createEmptyBorder(5, 0, 0, 0),
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(52, 152, 219), 1),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)
+                )
         ));
         infoPanel.setBackground(new Color(235, 245, 255));
 
@@ -139,11 +139,18 @@ public class ConfigurarLimiteHorasView extends JFrame {
                 return;
             }
 
+            int limite = Integer.parseInt(novoLimite);
+
+            if (limite <= 0) {
+                showError("O limite deve ser maior que 0.");
+                return;
+            }
+
             controller.setHourLimit(tipoSelecionado, novoLimite);
 
-            showSuccess("Limite atualizado com sucesso!\n\n" +
-                       "Tipo: " + tipoSelecionado.getName() + "\n" +
-                       "Novo limite: " + novoLimite + " horas");
+            showSuccess("Limite atualizado com sucesso!\n\n"
+                    + "Tipo: " + tipoSelecionado.getName() + "\n"
+                    + "Novo limite: " + novoLimite + " horas");
             dispose();
 
         } catch (Exception ex) {
@@ -163,8 +170,8 @@ public class ConfigurarLimiteHorasView extends JFrame {
         textField.setPreferredSize(new Dimension(250, 35));
         textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return textField;
     }
@@ -188,6 +195,7 @@ public class ConfigurarLimiteHorasView extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(41, 128, 185));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(52, 152, 219));
             }
@@ -207,6 +215,7 @@ public class ConfigurarLimiteHorasView extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(245, 245, 245));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(Color.WHITE);
             }

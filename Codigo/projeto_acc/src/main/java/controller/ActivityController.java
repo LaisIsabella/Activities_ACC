@@ -36,7 +36,7 @@ public class ActivityController {
     ) {
         try {
             boolean validData = ValidatorUtil.validateActivity(
-                name, description, date, hours, status, activityType, student, document
+                    name, description, date, hours, status, activityType, student, document
             );
 
             if (!validData) {
@@ -90,36 +90,48 @@ public class ActivityController {
             return false;
         }
 
+        // Atualiza status para DENIED
         boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
-        activity.getStudent().addMessage("Atividade \"" + activity.getName() + "\" foi negada.\nMotivo: " + response);
+
+        if (!updated) {
+            return false;
+        }
+
+        // ✅ Envia EMAIL específico de negação pelo supervisor
+        if (activity.getStudent() != null) {
+            EmailUtil.sendActivityDeniedBySupervisorEmail(
+                    activity.getStudent().getEmail(),
+                    activity.getStudent().getName(),
+                    activity.getName(),
+                    response
+            );
+        }
 
         return true;
     }
 
     // ============================
     // CE12 – EXCLUIR ATIVIDADE
-    // ✅ ATUALIZADO conforme requisito E12
     // ============================
     public boolean deleteActivity(Activity activity) {
         if (activity == null) {
             return false;
         }
 
-        // ✅ Usa canDeleteActivity() para validar
         if (!canDeleteActivity(activity)) {
             // Mensagem de erro específica baseada no motivo
             if (activity.getStatus() != Status.PENDING) {
                 throw new IllegalArgumentException(
-                    "Não é possível excluir esta atividade.\n" +
-                    "Status atual: " + getStatusText(activity.getStatus()) + "\n\n" +
-                    "Apenas atividades PENDENTES podem ser excluídas."
+                        "Não é possível excluir esta atividade.\n"
+                        + "Status atual: " + getStatusText(activity.getStatus()) + "\n\n"
+                        + "Apenas atividades PENDENTES podem ser excluídas."
                 );
             }
-            
+
             if (activity.getIsVerified()) {
                 throw new IllegalArgumentException(
-                    "Não é possível excluir esta atividade.\n\n" +
-                    "A atividade já foi validada pelo supervisor e está em processo de avaliação."
+                        "Não é possível excluir esta atividade.\n\n"
+                        + "A atividade já foi validada pelo supervisor e está em processo de avaliação."
                 );
             }
         }
@@ -138,10 +150,14 @@ public class ActivityController {
 
     private String getStatusText(Status status) {
         return switch (status) {
-            case PENDING -> "PENDENTE";
-            case APPROVED -> "APROVADA";
-            case DENIED -> "NEGADA";
-            case PARTIALLY_DENIED -> "AJUSTES NECESSÁRIOS";
+            case PENDING ->
+                "PENDENTE";
+            case APPROVED ->
+                "APROVADA";
+            case DENIED ->
+                "NEGADA";
+            case PARTIALLY_DENIED ->
+                "AJUSTES NECESSÁRIOS";
         };
     }
 
@@ -214,7 +230,7 @@ public class ActivityController {
         }
 
         List<Activity> approvedActivitiesOfSameType = new ArrayList<>();
-        
+
         for (Activity a : activityCatalog.getAllStudentApprovedActivities(activity.getStudent())) {
             if (a.getActivityType().getName().equalsIgnoreCase(activity.getActivityType().getName())) {
                 approvedActivitiesOfSameType.add(a);
@@ -227,26 +243,26 @@ public class ActivityController {
         }
 
         int hoursToAdd = approvedHours;
-        
+
         if (totalHoursInCategory + approvedHours > limit) {
             hoursToAdd = limit - totalHoursInCategory;
-            
+
             if (hoursToAdd <= 0) {
                 throw new IllegalArgumentException(
-                    "O aluno já atingiu o limite de " + limit + 
-                    " horas para atividades do tipo \"" + activity.getActivityType().getName() + "\"."
+                        "O aluno já atingiu o limite de " + limit
+                        + " horas para atividades do tipo \"" + activity.getActivityType().getName() + "\"."
                 );
             }
-            
+
             approvedHours = hoursToAdd;
         }
 
         activity.setHours(approvedHours);
 
         boolean updated = activityCatalog.updateActivity(
-            activity, 
-            Status.APPROVED, 
-            "Horas aprovadas: " + approvedHours
+                activity,
+                Status.APPROVED,
+                "Horas aprovadas: " + approvedHours
         );
 
         if (!updated) {
@@ -255,7 +271,7 @@ public class ActivityController {
 
         if (studentController != null) {
             boolean hoursAdded = studentController.addStudentHours(activity.getStudent(), approvedHours);
-            
+
             if (!hoursAdded) {
                 activityCatalog.updateActivity(activity, Status.PENDING, "");
                 throw new IllegalArgumentException("Erro ao adicionar horas ao estudante.");
@@ -290,15 +306,15 @@ public class ActivityController {
         result = activityCatalog.findAllUserActivity(student);
         return result;
     }
-    
+
     public boolean generateUserReport(Student student, String filePath) {
         try {
             if (student == null || filePath == null || filePath.isBlank()) {
                 return false;
             }
 
-            List<Activity> approvedActivities =
-                    activityCatalog.getAllStudentApprovedActivities(student);
+            List<Activity> approvedActivities
+                    = activityCatalog.getAllStudentApprovedActivities(student);
 
             if (approvedActivities == null || approvedActivities.isEmpty()) {
                 return false;

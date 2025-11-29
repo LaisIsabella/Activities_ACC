@@ -1,13 +1,9 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Student extends User {
     private String cpf;
     private String ra;
     private int totalHours;
-    private List<String> messages = new ArrayList<>();
 
     public Student() {
     }
@@ -16,8 +12,8 @@ public class Student extends User {
         super(name, email, password);
         this.cpf = cpf;
         this.ra = ra;
+        this.totalHours = 0;
     }
-    
     
     public String getCpf() {
         return cpf;
@@ -42,13 +38,4 @@ public class Student extends User {
     public void setTotalHours(int totalHours){
         this.totalHours = totalHours;
     }
-    
-    public void addMessage(String msg) {
-        if (msg != null) messages.add(msg);
-    }
-
-    public List<String> getMessages() {
-        return messages;
-    }
-    
 }

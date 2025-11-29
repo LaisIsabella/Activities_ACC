@@ -1,12 +1,8 @@
 package view;
 
-import catalog.ActivityCatalog;
-import catalog.StudentCatalog;
 import controller.ActivityController;
-import model.Activity;
 import model.ActivityType;
 import model.Student;
-import repository.ActivityTypeRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +20,7 @@ public class StudentMenuView extends JFrame {
         this.activityTypes = activityTypes;
 
         setTitle("Sistema ACC - Menu do Aluno");
-        setSize(550, 650);
+        setSize(550, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -75,11 +71,10 @@ public class StudentMenuView extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 0, 10, 0);
 
-        // Botões do menu
+        // ✅ Botões do menu (SEM "Caixa de Mensagens")
         JButton btnAdd = createMenuButton("Adicionar Atividade", "Submeta suas atividades complementares");
         JButton btnViewLimits = createMenuButton("Limites de Horas", "Consulte os limites por tipo de atividade");
         JButton btnHistory = createMenuButton("Histórico de Atividades", "Visualize suas atividades submetidas");
-        JButton btnMessages = createMenuButton("Caixa de Mensagens", "Confira notificações importantes");
         JButton btnGenerateReport = createMenuButton("Gerar Relatório", "Baixe o relatório das suas atividades");
         JButton btnExit = createExitButton("Sair", "Voltar ao menu principal");
 
@@ -92,33 +87,6 @@ public class StudentMenuView extends JFrame {
 
         btnHistory.addActionListener(e
                 -> new StudentHistoryView(student, activityController));
-        
-        btnMessages.addActionListener(e -> {
-            StringBuilder sb = new StringBuilder();
-            if (student.getMessages().isEmpty()) {
-                sb.append("Você não possui mensagens no momento.");
-            } else {
-                for (String m : student.getMessages()) {
-                    sb.append("• ").append(m).append("\n\n");
-                }
-            }
-            
-            JTextArea textArea = new JTextArea(sb.toString());
-            textArea.setEditable(false);
-            textArea.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            
-            JScrollPane scrollPane = new JScrollPane(textArea);
-            scrollPane.setPreferredSize(new Dimension(450, 300));
-            
-            JOptionPane.showMessageDialog(
-                this, 
-                scrollPane, 
-                "Mensagens", 
-                JOptionPane.INFORMATION_MESSAGE
-            );
-        });
 
         btnGenerateReport.addActionListener(e
                 -> new GenerateReportView(student, activityController));
@@ -133,10 +101,8 @@ public class StudentMenuView extends JFrame {
         gbc.gridy = 2;
         menuPanel.add(btnHistory, gbc);
         gbc.gridy = 3;
-        menuPanel.add(btnMessages, gbc);
-        gbc.gridy = 4;
         menuPanel.add(btnGenerateReport, gbc);
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.insets = new Insets(25, 0, 10, 0);
         menuPanel.add(btnExit, gbc);
 
