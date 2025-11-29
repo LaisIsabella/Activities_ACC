@@ -4,46 +4,34 @@
  */
 package controller;
 
+import catalog.ActivityTypeCatalog;
 import model.ActivityType;
-import repository.ActivityTypeRepository;
 
 import java.util.List;
+import util.ValidatorUtil;
 
 public class ActivityTypeController {
 
-    private final ActivityTypeRepository repo;
+    private final ActivityTypeCatalog catalog;
 
     public ActivityTypeController() {
-        this.repo = new ActivityTypeRepository();
+        this.catalog = new ActivityTypeCatalog();
     }
 
-    public List<ActivityType> listarTipos() {
-        return repo.loadAll();
+    public List<ActivityType> listTypes() {
+        return catalog.getAll();
     }
 
-    public void definirLimite(ActivityType tipo, String valor) throws Exception {
+    public void setHourLimit(ActivityType tipo, String valor) throws Exception {
 
-        if (tipo == null)
-            throw new IllegalArgumentException("Selecione um tipo.");
-
-        if (valor == null || valor.isBlank())
-            throw new IllegalArgumentException("Informe um limite.");
-
-        int horas;
-
-        try {
-            horas = Integer.parseInt(valor);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("O limite deve ser numérico.");
-        }
-
-        if (horas < 0)
-            throw new IllegalArgumentException("O limite não pode ser negativo.");
-
-        if (horas > 200)
-            throw new IllegalArgumentException("Acima das diretrizes do curso.");
-
-        repo.updateLimit(tipo.getName(), horas);
+    if (!ValidatorUtil.validateNotNull(tipo)) {
+        throw new IllegalArgumentException("Selecione um tipo.");
     }
+
+    int horas = ValidatorUtil.parseAndValidateHourLimit(valor);
+
+    catalog.updateLimit(tipo.getName(), horas);
 }
 
+
+}

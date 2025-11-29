@@ -16,123 +16,296 @@ import model.Student;
 public class AddActivityView extends JFrame {
 
     private File selectedFile;
+    private JLabel lblFileName;
 
     public AddActivityView(Student student, ActivityController controller, java.util.List<ActivityType> types) {
 
-        setTitle("Adicionar Atividade");
-        setSize(450, 350);
+        setTitle("Nova Atividade Complementar");
+        setSize(600, 700);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(7, 2, 10, 10));
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(245, 245, 250));
 
-        JTextField txtName = new JTextField();
-        JTextField txtDesc = new JTextField();
-        JTextField txtDate = new JTextField();
-        JTextField txtHours = new JTextField();
+        // ====== HEADER ======
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(155, 89, 182));
+        headerPanel.setPreferredSize(new Dimension(600, 80));
 
+        JLabel lblTitle = new JLabel("Adicionar Atividade", SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle);
+
+        // ====== FORMULÁRIO ======
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridBagLayout());
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(20, 30, 20, 30),
+            BorderFactory.createLineBorder(new Color(220, 220, 220), 1)
+        ));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.weightx = 0.3;
+
+        // Campos do formulário
+        JTextField txtName = createTextField();
+        JTextField txtDesc = createTextField();
+        JTextField txtDate = createTextField();
+        txtDate.setToolTipText("Formato: DD/MM/AAAA");
+        JTextField txtHours = createTextField();
         JComboBox<ActivityType> comboType = new JComboBox<>(types.toArray(new ActivityType[0]));
+        styleComboBox(comboType);
 
-        JButton btnAttach = new JButton("Anexar PDF");
-        JButton btnSave = new JButton("Salvar");
+        // Nome
+        gbc.gridy = 0;
+        formPanel.add(createLabel("Nome da Atividade:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(txtName, gbc);
 
+        // Descrição
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        formPanel.add(createLabel("Descrição:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(txtDesc, gbc);
+
+        // Tipo
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        formPanel.add(createLabel("Tipo de Atividade:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(comboType, gbc);
+
+        // Data
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.3;
+        formPanel.add(createLabel("Data (DD/MM/AAAA):"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(txtDate, gbc);
+
+        // Horas
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0.3;
+        formPanel.add(createLabel("Horas:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(txtHours, gbc);
+
+        // Anexo
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.weightx = 0.3;
+        formPanel.add(createLabel("Comprovante (PDF):"), gbc);
+
+        JPanel attachPanel = new JPanel(new BorderLayout(10, 0));
+        attachPanel.setOpaque(false);
+
+        JButton btnAttach = new JButton("Escolher Arquivo");
+        styleSecondaryButton(btnAttach);
+        
+        lblFileName = new JLabel("Nenhum arquivo selecionado");
+        lblFileName.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblFileName.setForeground(new Color(120, 120, 120));
+
+        attachPanel.add(btnAttach, BorderLayout.WEST);
+        attachPanel.add(lblFileName, BorderLayout.CENTER);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        formPanel.add(attachPanel, gbc);
+
+        // Botões
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        buttonPanel.setOpaque(false);
+
+        JButton btnSave = new JButton("Salvar Atividade");
+        stylePrimaryButton(btnSave);
+
+        JButton btnCancel = new JButton("Cancelar");
+        styleSecondaryButton(btnCancel);
+
+        buttonPanel.add(btnCancel);
+        buttonPanel.add(btnSave);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 10, 10, 10);
+        formPanel.add(buttonPanel, gbc);
+
+        // ====== AÇÕES ======
         btnAttach.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
-            int r = chooser.showOpenDialog(this);
+            chooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".pdf");
+                }
+                public String getDescription() {
+                    return "Arquivos PDF (*.pdf)";
+                }
+            });
 
+            int r = chooser.showOpenDialog(this);
             if (r == JFileChooser.APPROVE_OPTION) {
                 selectedFile = chooser.getSelectedFile();
-                JOptionPane.showMessageDialog(this, "Arquivo selecionado");
+                lblFileName.setText(selectedFile.getName());
+                lblFileName.setForeground(new Color(46, 204, 113));
             }
         });
 
-btnSave.addActionListener(e -> {
-    try {
-        // validações
-        String name = txtName.getText();
-        String desc = txtDesc.getText();
-        String dateStr = txtDate.getText();
-        String hoursStr = txtHours.getText();
+        btnSave.addActionListener(e -> {
+            try {
+                String name = txtName.getText();
+                String desc = txtDesc.getText();
+                String dateStr = txtDate.getText();
+                String hoursStr = txtHours.getText();
 
-        if (name.isBlank()) throw new IllegalArgumentException("Nome obrigatório.");
-        if (desc.isBlank()) throw new IllegalArgumentException("Descrição obrigatória.");
+                if (name.isBlank()) throw new IllegalArgumentException("Nome obrigatório.");
+                if (desc.isBlank()) throw new IllegalArgumentException("Descrição obrigatória.");
+                if (!dateStr.matches("\\d{2}/\\d{2}/\\d{4}"))
+                    throw new IllegalArgumentException("Data inválida. Use DD/MM/AAAA.");
 
-        if (!dateStr.matches("\\d{2}/\\d{2}/\\d{4}"))
-            throw new IllegalArgumentException("Data inválida. Use DD/MM/AAAA.");
+                int hours = Integer.parseInt(hoursStr);
+                if (hours <= 0) throw new IllegalArgumentException("Horas devem ser maior que zero.");
 
-        int hours = Integer.parseInt(hoursStr);
+                ActivityType type = (ActivityType) comboType.getSelectedItem();
+                if (type == null) throw new IllegalArgumentException("Selecione um tipo de atividade.");
 
-        if (hours < 0) throw new IllegalArgumentException("Horas inválidas.");
+                if (hours > type.getLimit())
+                    throw new IllegalArgumentException(
+                        "O tipo \"" + type.getName() + "\" permite no máximo " + type.getLimit() + " horas."
+                    );
 
-        ActivityType type = (ActivityType) comboType.getSelectedItem();
-        if (type == null) throw new IllegalArgumentException("Tipo obrigatório.");
+                if (selectedFile == null)
+                    throw new IllegalArgumentException("Selecione um arquivo PDF.");
 
-        // regra do limite
-        if (hours > type.getLimit())
-            throw new IllegalArgumentException(
-                    "O tipo \"" + type.getName() + "\" permite no máximo " +
-                     type.getLimit() + " horas."
-            );
+                if (!selectedFile.getName().toLowerCase().endsWith(".pdf"))
+                    throw new IllegalArgumentException("O arquivo deve ser PDF.");
 
-        if (selectedFile == null)
-            throw new IllegalArgumentException("Selecione um arquivo PDF.");
+                Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
 
-        if (!selectedFile.getName().toLowerCase().endsWith(".pdf"))
-            throw new IllegalArgumentException("O arquivo deve ser PDF.");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date today = cal.getTime();
 
-        // validar data
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
+                if (date.before(today))
+                    throw new IllegalArgumentException("A data não pode ser passada.");
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date today = cal.getTime();
+                File destFolder = new File("attachments");
+                destFolder.mkdirs();
 
-        if (date.before(today))
-            throw new IllegalArgumentException("A data não pode ser passada.");
+                File destFile = new File(destFolder, System.currentTimeMillis() + "_" + selectedFile.getName());
+                selectedFile.renameTo(destFile);
 
-        // salvar anexo
-        File destFolder = new File("attachments");
-        destFolder.mkdirs();
+                Document doc = new Document(selectedFile.getName(), destFile.getAbsolutePath());
 
-        File destFile = new File(destFolder, System.currentTimeMillis() + "_" + selectedFile.getName());
-        selectedFile.renameTo(destFile);
+                boolean ok = controller.createActivity(name, desc, date, hours, Status.PENDING, type, student, doc);
 
-        Document doc = new Document(selectedFile.getName(), destFile.getAbsolutePath());
+                if (!ok) {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar a atividade.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-        boolean ok = controller.createActivity(
-                name,
-                desc,
-                date,
-                hours,
-                Status.PENDING,
-                type,
-                student,
-                doc
-        );
+                JOptionPane.showMessageDialog(this, "Atividade criada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
 
-        if (!ok) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar a atividade.");
-            return;
-        }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-        JOptionPane.showMessageDialog(this, "Atividade criada com sucesso!");
-        dispose();
+        btnCancel.addActionListener(e -> dispose());
 
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-    }
-});
+        // Container com scroll
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(245, 245, 250));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        mainPanel.add(formPanel, BorderLayout.CENTER);
 
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-
-        add(new JLabel("Nome:")); add(txtName);
-        add(new JLabel("Descrição:")); add(txtDesc);
-        add(new JLabel("Data (DD/MM/AAAA):")); add(txtDate);
-        add(new JLabel("Horas:")); add(txtHours);
-        add(new JLabel("Tipo:")); add(comboType);
-        add(btnAttach); add(btnSave);
+        add(headerPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        label.setForeground(new Color(70, 70, 70));
+        return label;
+    }
+
+    private JTextField createTextField() {
+        JTextField textField = new JTextField();
+        textField.setPreferredSize(new Dimension(300, 35));
+        textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        return textField;
+    }
+
+    private void styleComboBox(JComboBox<?> comboBox) {
+        comboBox.setPreferredSize(new Dimension(300, 35));
+        comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        comboBox.setBackground(Color.WHITE);
+    }
+
+    private void stylePrimaryButton(JButton button) {
+        button.setPreferredSize(new Dimension(160, 40));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(155, 89, 182));
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(142, 68, 173));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(155, 89, 182));
+            }
+        });
+    }
+
+    private void styleSecondaryButton(JButton button) {
+        button.setPreferredSize(new Dimension(140, 35));
+        button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        button.setForeground(new Color(70, 70, 70));
+        button.setBackground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(245, 245, 245));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+            }
+        });
     }
 }

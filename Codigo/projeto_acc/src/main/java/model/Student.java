@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Student extends User {
     private String cpf;
-    private int ra;
+    private String ra;
     private int totalHours;
     private List<String> messages = new ArrayList<>();
 
     public Student() {
     }
 
-    public Student(String name, String email, String password, String cpf, int ra) {
+    public Student(String name, String email, String password, String cpf, String ra) {
         super(name, email, password);
         this.cpf = cpf;
         this.ra = ra;
@@ -27,11 +27,11 @@ public class Student extends User {
         this.cpf = cpf;
     }
 
-    public int getRa() {
+    public String getRa() {
         return ra;
     }
 
-    public void setRa(int ra) {
+    public void setRa(String ra) {
         this.ra = ra;
     }
     

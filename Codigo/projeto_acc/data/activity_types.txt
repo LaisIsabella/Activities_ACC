@@ -1,6 +1,6 @@
-Pesquisa;120
-Extensão;100
-Ensino;120
+Pesquisa;80
+Extensão;10
+Ensino;12
 Monitoria;20
 Visita Tecnica;40
-Curso Extra;10
+Curso Extra;21

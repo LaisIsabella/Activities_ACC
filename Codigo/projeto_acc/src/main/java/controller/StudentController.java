@@ -20,7 +20,7 @@ public class StudentController {
         this.studentCatalog = studentCatalog;
     }
 
-    public boolean createStudent(String name, String email, String password, String cpf, int ra) {
+    public boolean createStudent(String name, String email, String password, String cpf, String ra) {
         // 1. Valida os dados do estudante
         boolean validData = validateStudent(name, email, password, cpf, ra);
 
@@ -34,7 +34,7 @@ public class StudentController {
     }
 
     // Validação dos dados de cadastro (usado no registro)
-    public boolean validateStudent(String name, String email, String password, String cpf, int ra) {
+    public boolean validateStudent(String name, String email, String password, String cpf, String ra) {
         boolean validEmail = ValidatorUtil.validateInstitutionalEmail(email);
         boolean validPassword = ValidatorUtil.validatePassword(password);
         boolean validName = (name != null && !name.isEmpty());
@@ -71,13 +71,13 @@ public class StudentController {
         return false;
     }
 
-    public Student authenticateStudent(String email, String password) {
+    public boolean authenticateStudent(String email, String password) {
         for (Student s : studentCatalog.getStudents()) {
             if (s.getEmail().equalsIgnoreCase(email) && s.getPassword().equals(password)) {
-                return s;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public boolean addStudentHours(Student student, int hours) {

@@ -1,21 +1,21 @@
 package model;
 
 public class Coordinator extends User {
-    private int rc;
+    private String rc;
 
     public Coordinator() {
     }
 
-    public Coordinator(String name, String email, String password, int rc) {
+    public Coordinator(String name, String email, String password, String rc) {
         super(name, email, password);
         this.rc = rc;
     }
 
-    public int getRc() {
+    public String getRc() {
         return rc;
     }
 
-    public void setRc(int rc) {
+    public void setRc(String rc) {
         this.rc = rc;
     }
 }

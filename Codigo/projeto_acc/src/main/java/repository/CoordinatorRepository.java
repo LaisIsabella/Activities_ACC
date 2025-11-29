@@ -39,10 +39,10 @@ public class CoordinatorRepository {
                 if (p.length < 4) continue;
 
                 Coordinator coord = new Coordinator(
-                        p[0],       // name
-                        p[1],       // email
-                        p[2],       // password
-                        Integer.parseInt(p[3]) // rc
+                        p[0],   // name
+                        p[1],   // email
+                        p[2],   // password
+                        p[3]    // rc como String
                 );
 
                 list.add(coord);
@@ -67,7 +67,7 @@ public class CoordinatorRepository {
                         c.getName() + ";" +
                         c.getEmail() + ";" +
                         c.getPassword() + ";" +
-                        c.getRc()
+                        c.getRc()    // já é String
                 );
                 bw.newLine();
             }

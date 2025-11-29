@@ -1,73 +1,65 @@
 package view;
 
 import controller.ActivityController;
-import model.Activity;
 import model.Student;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.List;
 
 public class GenerateReportView extends JFrame {
 
     public GenerateReportView(Student student, ActivityController controller) {
-        setTitle("Gerar Relatório de Atividades");
-        setSize(500, 300);
+        setTitle("Gerar Relatório");
+        setSize(450, 300);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(245, 245, 250));
 
-        // Painel de informações
-        JPanel infoPanel = new JPanel(new GridLayout(4, 1, 5, 5));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // ====== HEADER ======
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(155, 89, 182));
+        headerPanel.setPreferredSize(new Dimension(450, 80));
 
-        // Busca atividades aprovadas
-        List<Activity> approvedActivities = controller.getAllStudentApprovedActivities(student);
+        JLabel lblTitle = new JLabel("Gerar Relatório em PDF", SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle);
 
-        // Calcula total de horas
-        int totalHours = 0;
-        for (Activity a : approvedActivities) {
-            totalHours += a.getHours();
-        }
+        // ====== INFORMAÇÕES DO ALUNO ======
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        JLabel lblInfo = new JLabel("Relatório de Atividades Complementares");
-        lblInfo.setFont(new Font("Arial", Font.BOLD, 14));
-        
-        JLabel lblStudent = new JLabel("Aluno: " + student.getName() + " (RA: " + student.getRa() + ")");
-        JLabel lblActivities = new JLabel("Total de atividades aprovadas: " + approvedActivities.size());
-        JLabel lblHours = new JLabel("Total de horas aprovadas: " + totalHours + "h");
+        JLabel lblStudent = new JLabel("Aluno: " + student.getName());
+        lblStudent.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblStudent.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        infoPanel.add(lblInfo);
+        JLabel lblRa = new JLabel("RA: " + student.getRa());
+        lblRa.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblRa.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         infoPanel.add(lblStudent);
-        infoPanel.add(lblActivities);
-        infoPanel.add(lblHours);
+        infoPanel.add(Box.createVerticalStrut(10));
+        infoPanel.add(lblRa);
 
-        add(infoPanel, BorderLayout.CENTER);
+        // ====== BOTÕES ======
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 20));
+        buttonPanel.setBackground(new Color(245, 245, 250));
 
-        // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        
         JButton btnGenerate = new JButton("Gerar PDF");
+        stylePrimaryButton(btnGenerate);
+
         JButton btnCancel = new JButton("Cancelar");
+        styleSecondaryButton(btnCancel);
 
         buttonPanel.add(btnGenerate);
         buttonPanel.add(btnCancel);
 
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // Ação do botão Gerar
+        // ====== AÇÃO DO BOTÃO GERAR ======
         btnGenerate.addActionListener(e -> {
-            if (approvedActivities.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    this,
-                    "Você não possui atividades aprovadas para gerar o relatório.",
-                    "Sem Atividades",
-                    JOptionPane.WARNING_MESSAGE
-                );
-                return;
-            }
 
-            // Abre diálogo para escolher local de salvamento
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Salvar Relatório");
             fileChooser.setSelectedFile(new File("relatorio_" + student.getRa() + ".pdf"));
@@ -78,41 +70,25 @@ public class GenerateReportView extends JFrame {
                 File fileToSave = fileChooser.getSelectedFile();
                 String filePath = fileToSave.getAbsolutePath();
 
-                // Garante extensão .pdf
                 if (!filePath.toLowerCase().endsWith(".pdf")) {
                     filePath += ".pdf";
                 }
 
-                // Gera o relatório
-                boolean success = controller.generateUserReport(filePath, approvedActivities);
+                boolean success = controller.generateUserReport(student, filePath);
 
                 if (success) {
-                    int option = JOptionPane.showConfirmDialog(
+                    JOptionPane.showMessageDialog(
                         this,
-                        "Relatório gerado com sucesso em:\n" + filePath + "\n\nDeseja abrir o arquivo?",
+                        "Relatório gerado com sucesso!",
                         "Sucesso",
-                        JOptionPane.YES_NO_OPTION,
                         JOptionPane.INFORMATION_MESSAGE
                     );
-
-                    if (option == JOptionPane.YES_OPTION) {
-                        try {
-                            Desktop.getDesktop().open(new File(filePath));
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(
-                                this,
-                                "Relatório gerado, mas não foi possível abri-lo automaticamente.",
-                                "Aviso",
-                                JOptionPane.WARNING_MESSAGE
-                            );
-                        }
-                    }
-
                     dispose();
+
                 } else {
                     JOptionPane.showMessageDialog(
                         this,
-                        "Erro ao gerar o relatório. Verifique as permissões do diretório.",
+                        "Erro ao gerar o relatório.",
                         "Erro",
                         JOptionPane.ERROR_MESSAGE
                     );
@@ -120,9 +96,32 @@ public class GenerateReportView extends JFrame {
             }
         });
 
-        // Ação do botão Cancelar
         btnCancel.addActionListener(e -> dispose());
 
+        add(headerPanel, BorderLayout.NORTH);
+        add(infoPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
         setVisible(true);
+    }
+
+    private void stylePrimaryButton(JButton button) {
+        button.setPreferredSize(new Dimension(150, 45));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(155, 89, 182));
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    private void styleSecondaryButton(JButton button) {
+        button.setPreferredSize(new Dimension(120, 45));
+        button.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        button.setForeground(new Color(70, 70, 70));
+        button.setBackground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }

@@ -7,50 +7,125 @@ import controller.*;
 public class RegisterView extends JFrame {
 
     public RegisterView(String userType, CoordinatorController cc, SupervisorController sc, StudentController stc) {
-        setTitle("Cadastro - " + userType.toUpperCase());
-        setSize(400, 400);
+
+        String title = switch (userType) {
+            case "coordinator" ->
+                "Cadastro - Coordenador";
+            case "supervisor" ->
+                "Cadastro - Supervisor";
+            case "student" ->
+                "Cadastro - Aluno";
+            default ->
+                "Cadastro";
+        };
+
+        setTitle(title);
+        setSize(500, 650);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(8, 2, 10, 10));
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(245, 245, 250));
 
-        JLabel lblName = new JLabel("Nome:");
-        JTextField txtName = new JTextField();
+        // ====== PAINEL DO TOPO ======
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(0, 102, 204));
+        headerPanel.setPreferredSize(new Dimension(500, 80));
 
-        JLabel lblEmail = new JLabel("E-mail:");
-        JTextField txtEmail = new JTextField();
+        String icon = switch (userType) {
+            case "coordinator" ->
+                "";
+            case "supervisor" ->
+                "";
+            case "student" ->
+                "";
+            default ->
+                "";
+        };
 
-        JLabel lblPassword = new JLabel("Senha:");
+        JLabel lblTitle = new JLabel(icon + "  " + title, SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle);
+
+        // ====== PAINEL CENTRAL (FORMULÁRIO) ======
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridBagLayout());
+        formPanel.setBackground(new Color(245, 245, 250));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(8, 0, 8, 0);
+        gbc.gridx = 0;
+
+        // Nome
+        gbc.gridy = 0;
+        formPanel.add(createLabel("Nome completo"), gbc);
+        JTextField txtName = createTextField();
+        gbc.gridy = 1;
+        formPanel.add(txtName, gbc);
+
+        // Email
+        gbc.gridy = 2;
+        formPanel.add(createLabel("E-mail institucional (@unesp.br)"), gbc);
+        JTextField txtEmail = createTextField();
+        gbc.gridy = 3;
+        formPanel.add(txtEmail, gbc);
+
+        // Senha
+        gbc.gridy = 4;
+        formPanel.add(createLabel("Senha (mínimo 8 caracteres)"), gbc);
         JPasswordField txtPassword = new JPasswordField();
+        styleTextField(txtPassword);
+        gbc.gridy = 5;
+        formPanel.add(txtPassword, gbc);
 
         // Campos dinâmicos
-        JLabel lblExtra1 = new JLabel();
-        JTextField txtExtra1 = new JTextField();
+        JLabel lblExtra1 = createLabel("");
+        JTextField txtExtra1 = createTextField();
+        JLabel lblExtra2 = createLabel("");
+        JTextField txtExtra2 = createTextField();
 
-        JLabel lblExtra2 = new JLabel();
-        JTextField txtExtra2 = new JTextField();
-
-        // Configuração por tipo
         switch (userType) {
             case "student" -> {
-                lblExtra1.setText("CPF:");
-                lblExtra2.setText("RA:");
-                lblExtra2.setVisible(true);
-                txtExtra2.setVisible(true);
+                lblExtra1.setText("CPF (somente números)");
+                lblExtra2.setText("RA (Registro Acadêmico)");
+                gbc.gridy = 6;
+                formPanel.add(lblExtra1, gbc);
+                gbc.gridy = 7;
+                formPanel.add(txtExtra1, gbc);
+                gbc.gridy = 8;
+                formPanel.add(lblExtra2, gbc);
+                gbc.gridy = 9;
+                formPanel.add(txtExtra2, gbc);
             }
             case "supervisor" -> {
-                lblExtra1.setText("CPF:");
-                lblExtra2.setVisible(false);
-                txtExtra2.setVisible(false);
+                lblExtra1.setText("CPF (somente números)");
+                gbc.gridy = 6;
+                formPanel.add(lblExtra1, gbc);
+                gbc.gridy = 7;
+                formPanel.add(txtExtra1, gbc);
             }
             case "coordinator" -> {
-                lblExtra1.setText("RC:");
-                lblExtra2.setVisible(false);
-                txtExtra2.setVisible(false);
+                lblExtra1.setText("RC (Registro do Coordenador)");
+                gbc.gridy = 6;
+                formPanel.add(lblExtra1, gbc);
+                gbc.gridy = 7;
+                formPanel.add(txtExtra1, gbc);
             }
         }
 
-        JButton btnRegister = new JButton("Registrar");
-        JButton btnCancel = new JButton("Cancelar");
+        // Botões
+        JButton btnRegister = createStyledButton("CADASTRAR", new Color(46, 204, 113));
+        JButton btnCancel = createStyledButton("CANCELAR", new Color(231, 76, 60));
 
+        gbc.gridy = 10;
+        gbc.insets = new Insets(25, 0, 8, 0);
+        formPanel.add(btnRegister, gbc);
+        gbc.gridy = 11;
+        gbc.insets = new Insets(8, 0, 8, 0);
+        formPanel.add(btnCancel, gbc);
+
+        // ====== AÇÕES ======
         btnRegister.addActionListener(e -> {
             String name = txtName.getText();
             String email = txtEmail.getText();
@@ -62,84 +137,114 @@ public class RegisterView extends JFrame {
             try {
                 switch (userType) {
                     case "coordinator" -> {
-                        int rc = Integer.parseInt(extra1);
+                        String rc = extra1;
                         success = cc.createCoordinator(name, email, password, rc);
                     }
-
                     case "supervisor" -> {
                         if (sc.getSupervisorCatalog().findSupervisorByEmail(email) != null) {
-                            JOptionPane.showMessageDialog(this, "Já existe um supervisor com esse e-mail.");
+                            JOptionPane.showMessageDialog(this, "Já existe um supervisor com esse e-mail.", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                         success = sc.createSupervisor(name, email, password, extra1);
                     }
-
                     case "student" -> {
                         String cpf = extra1;
-                        int ra = Integer.parseInt(extra2);
+                        String ra = extra2;
 
-                        // VERIFICAÇÃO DE DUPLICIDADE
                         if (stc.getStudentCatalog().findStudentByEmail(email) != null) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse e-mail.");
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse e-mail.", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        if (stc.getStudentCatalog().getStudents().stream()
-                                .anyMatch(s -> s.getCpf().equals(cpf))) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse CPF.");
+                        if (stc.getStudentCatalog().getStudents().stream().anyMatch(s -> s.getCpf().equals(cpf))) {
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse CPF.", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        if (stc.getStudentCatalog().getStudents().stream()
-                                .anyMatch(s -> s.getRa() == ra)) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse RA.");
+                        if (stc.getStudentCatalog().getStudents().stream().anyMatch(s -> s.getRa().equals(ra))) {
+                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse RA.", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
-                        // VALIDA FORMATO DOS DADOS
                         if (!stc.validateStudent(name, email, password, cpf, ra)) {
-                            JOptionPane.showMessageDialog(this,
-                                    "Dados inválidos. Verifique nome, e-mail, senha, CPF (11 dígitos) e RA (1000–9999).",
-                                    "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
                         success = stc.createStudent(name, email, password, cpf, ra);
                     }
-                }
 
+                }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "Campos numéricos inválidos (RA/RC).",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Campos numéricos inválidos (RA/RC).", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (!success) {
-                JOptionPane.showMessageDialog(this,
-                        "Credenciais inválidas ou usuário não encontrado.",
-                        "Erro de Login",
-                        JOptionPane.ERROR_MESSAGE);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                new LoginView(userType, cc, sc, stc, null);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha no cadastro. Verifique os dados.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-
-            JOptionPane.showMessageDialog(this,
-                    success ? "Cadastro realizado com sucesso!" : "Falha no cadastro!");
         });
 
-        btnCancel.addActionListener(e -> dispose());
+        btnCancel.addActionListener(e -> {
+            new LoginView(userType, cc, sc, stc, null);
+            dispose();
+        });
 
-        // Construção da interface
-        add(lblName);
-        add(txtName);
-        add(lblEmail);
-        add(txtEmail);
-        add(lblPassword);
-        add(txtPassword);
-        add(lblExtra1);
-        add(txtExtra1);
-        add(lblExtra2);
-        add(txtExtra2);
-        add(btnRegister);
-        add(btnCancel);
+        // Adiciona à janela
+        add(headerPanel, BorderLayout.NORTH);
+
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        label.setForeground(new Color(70, 70, 70));
+        return label;
+    }
+
+    private JTextField createTextField() {
+        JTextField textField = new JTextField();
+        styleTextField(textField);
+        return textField;
+    }
+
+    private void styleTextField(JTextField textField) {
+        textField.setPreferredSize(new Dimension(350, 38));
+        textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private JButton createStyledButton(String text, Color color) {
+        JButton button = new JButton(text);
+        button.setPreferredSize(new Dimension(350, 45));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(color);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(color.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(color);
+            }
+        });
+
+        return button;
     }
 }

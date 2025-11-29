@@ -22,11 +22,11 @@ public class CoordinatorController {
 
 
     // Validação dos dados de cadastro (usado no registro)
-    public boolean validateCoordinator(String name, String email, String password, int rc) {
+    public boolean validateCoordinator(String name, String email, String password, String rc) {
         boolean validEmail = ValidatorUtil.validateInstitutionalEmail(email);
         boolean validPassword = ValidatorUtil.validatePassword(password);
         boolean validName = (name != null && !name.isEmpty());
-        boolean validRc = (rc > 0);
+        boolean validRc = ValidatorUtil.validateRc(rc);
 
         return validName && validEmail && validPassword && validRc;
     }
@@ -40,11 +40,12 @@ public class CoordinatorController {
     }
 
     // CE03 - Efetua o login do coordenador
-    public boolean loginCoordinator(String email, String password) {
+    public boolean authenticateCoordinator(String email, String password) {
         // 1. Valida credenciais
         boolean validData = validateCoordinatorLogin(email, password);
 
         if (!validData) {
+            System.out.println("Formato de dados inválidos no Login");
             return false;
         }
 
@@ -55,11 +56,12 @@ public class CoordinatorController {
         if (coordinator != null && coordinator.getPassword().equals(password)) {
             return true;
         }
-
+        
+        System.out.println("Coordenador não encontrado ou senha inválida");
         return false;
     }
     
-    public boolean createCoordinator(String name, String email, String password, int rc) {
+    public boolean createCoordinator(String name, String email, String password, String rc) {
     // 1. Valida os dados do coordenador
     boolean validData = validateCoordinator(name, email, password, rc);
 
@@ -70,15 +72,6 @@ public class CoordinatorController {
     // 2. Cria o objeto Coordinator e adiciona ao catálogo
     Coordinator coordinator = new Coordinator(name, email, password, rc);
     return coordinatorCatalog.addCoordinator(coordinator);
-}
-    
-    public Coordinator authenticateCoordinator(String email, String password) {
-    for (Coordinator c : coordinatorCatalog.getAll()) {
-        if (c.getEmail().equalsIgnoreCase(email) && c.getPassword().equals(password)) {
-            return c;
-        }
-    }
-    return null;
 }
 
 

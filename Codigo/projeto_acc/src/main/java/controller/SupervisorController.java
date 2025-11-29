@@ -38,7 +38,7 @@ public class SupervisorController {
     }
 
     // Efetua o login do supervisor
-    public boolean loginSupervisor(String email, String password) {
+    public boolean authenticateSupervisor(String email, String password) {
         // 1. Valida credenciais
         boolean validData = validateSupervisorLogin(email, password);
 
@@ -63,7 +63,7 @@ public class SupervisorController {
     }
 
     // Cria um novo supervisor e adiciona ao catálogo
-    public boolean createSupervisor(String name, String email, String password, String cpf) {//should be name, email, password and rc
+    public boolean createSupervisor(String name, String email, String password, String cpf) {
         // 1. Valida os dados do supervisor
         boolean validData = validateSupervisor(name, email, password, cpf);
 
@@ -76,13 +76,5 @@ public class SupervisorController {
         return supervisorCatalog.addSupervisor(supervisor);
     }
 
-    public Supervisor authenticateSupervisor(String email, String password) {
-        for (Supervisor s : supervisorCatalog.getSupervisors()) {
-            if (s.getEmail().equalsIgnoreCase(email) && s.getPassword().equals(password)) {
-                return s;
-            }
-        }
-        return null;
-    }
 
 }

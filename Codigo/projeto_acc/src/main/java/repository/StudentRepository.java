@@ -31,7 +31,7 @@ public class StudentRepository {
                         p[1],  // email
                         p[2],  // password
                         p[3],  // cpf
-                        Integer.parseInt(p[4]) // ra
+                        p[4]   // ra como String AGORA
                 ));
             }
 
@@ -51,7 +51,7 @@ public class StudentRepository {
                         s.getEmail() + ";" +
                         s.getPassword() + ";" +
                         s.getCpf() + ";" +
-                        s.getRa()
+                        s.getRa()                  
                 );
                 bw.newLine();
             }

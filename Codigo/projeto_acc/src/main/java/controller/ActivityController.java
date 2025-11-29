@@ -7,14 +7,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import util.EmailUtil;
 import util.PDFUtil;
+import util.ValidatorUtil;
 
 public class ActivityController {
 
     private final ActivityCatalog activityCatalog;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private StudentController studentController;
 
     public ActivityController(ActivityCatalog catalog) {
         this.activityCatalog = catalog;
+    }
+
+    public void setStudentController(StudentController studentController) {
+        this.studentController = studentController;
     }
 
     // CE11 – criar atividade
@@ -29,6 +35,14 @@ public class ActivityController {
             Document document
     ) {
         try {
+            boolean validData = ValidatorUtil.validateActivity(
+                name, description, date, hours, status, activityType, student, document
+            );
+
+            if (!validData) {
+                return false;
+            }
+
             Activity activity = new Activity(
                     name,
                     description,
@@ -39,7 +53,7 @@ public class ActivityController {
                     activityType,
                     student,
                     document,
-                    false // toda atividade inicia NÃO verificada
+                    false
             );
 
             return activityCatalog.addActivity(activity);
@@ -47,36 +61,6 @@ public class ActivityController {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public boolean validateActivity(String name, String description, Date date, int hours,
-            Status status, ActivityType activityType,
-            Student student, Document document) {
-
-        return validateActivityName(name)
-                && description != null && !description.isBlank()
-                && date != null
-                && hours > 0
-                && validateStatus(status)
-                && validateActivityType(activityType)
-                && validateStudent(student)
-                && document != null;
-    }
-
-    public boolean validateStatus(Status status) {
-        return status != null;
-    }
-
-    public boolean validateActivityName(String name) {
-        return name != null && !name.isBlank();
-    }
-
-    public boolean validateActivityType(ActivityType type) {
-        return type != null;
-    }
-
-    public boolean validateStudent(Student student) {
-        return student != null;
     }
 
     public List<Activity> searchFilteredActivities(Student student, Status status, ActivityType type, Boolean isVerified) {
@@ -106,22 +90,59 @@ public class ActivityController {
             return false;
         }
 
-        activity.setStatus(Status.DENIED); // O enum pode continuar existindo, apenas não usar nesse fluxo
-        activity.setResponse(response);
-        activityCatalog.save(); // Salva alterações
-
-        // Registra mensagem na caixa do aluno (adicionado no Student)
+        boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
         activity.getStudent().addMessage("Atividade \"" + activity.getName() + "\" foi negada.\nMotivo: " + response);
 
         return true;
     }
 
-    // CE12 – excluir atividade (somente pendente)
+    // ============================
+    // CE12 – EXCLUIR ATIVIDADE
+    // ✅ ATUALIZADO conforme requisito E12
+    // ============================
     public boolean deleteActivity(Activity activity) {
-        if (activity.getStatus() != Status.PENDING) {
+        if (activity == null) {
             return false;
         }
+
+        // ✅ Usa canDeleteActivity() para validar
+        if (!canDeleteActivity(activity)) {
+            // Mensagem de erro específica baseada no motivo
+            if (activity.getStatus() != Status.PENDING) {
+                throw new IllegalArgumentException(
+                    "Não é possível excluir esta atividade.\n" +
+                    "Status atual: " + getStatusText(activity.getStatus()) + "\n\n" +
+                    "Apenas atividades PENDENTES podem ser excluídas."
+                );
+            }
+            
+            if (activity.getIsVerified()) {
+                throw new IllegalArgumentException(
+                    "Não é possível excluir esta atividade.\n\n" +
+                    "A atividade já foi validada pelo supervisor e está em processo de avaliação."
+                );
+            }
+        }
+
+        // ✅ Todas as validações passaram
         return activityCatalog.deleteActivity(activity);
+    }
+
+    public boolean canDeleteActivity(Activity activity) {
+        if (activity == null) {
+            return false;
+        }
+        // Só pode excluir se estiver PENDING e NÃO verificada
+        return activity.getStatus() == Status.PENDING && !activity.getIsVerified();
+    }
+
+    private String getStatusText(Status status) {
+        return switch (status) {
+            case PENDING -> "PENDENTE";
+            case APPROVED -> "APROVADA";
+            case DENIED -> "NEGADA";
+            case PARTIALLY_DENIED -> "AJUSTES NECESSÁRIOS";
+        };
     }
 
     // ============================
@@ -129,56 +150,54 @@ public class ActivityController {
     // ============================
     public boolean denyActivity(Activity activity, String response) {
 
-    if (activity.getStatus() != Status.PENDING) {
-        throw new IllegalArgumentException("Atividade já foi avaliada.");
-    }
+        if (activity.getStatus() != Status.PENDING) {
+            throw new IllegalArgumentException("Atividade já foi avaliada.");
+        }
 
-    if (response == null || response.isBlank()) {
-        throw new IllegalArgumentException("Justificativa é obrigatória.");
-    }
+        if (response == null || response.isBlank()) {
+            throw new IllegalArgumentException("Justificativa é obrigatória.");
+        }
 
-    boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
-    
-    // ✅ CE16 - Envia email de notificação
-    if (updated && activity.getStudent() != null) {
-        EmailUtil.sendActivityDeniedEmail(
-            activity.getStudent().getEmail(),
-            activity.getStudent().getName(),
-            activity.getName(),
-            response
-        );
+        boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
+
+        if (updated && activity.getStudent() != null) {
+            EmailUtil.sendActivityDeniedEmail(
+                    activity.getStudent().getEmail(),
+                    activity.getStudent().getName(),
+                    activity.getName(),
+                    response
+            );
+        }
+
+        return updated;
     }
-    
-    return updated;
-}
 
     // ============================
     // CE06 – NEGAR PARCIALMENTE
     // ============================
     public boolean partiallyDenyActivity(Activity activity, String response) {
 
-    if (activity.getStatus() != Status.PENDING) {
-        throw new IllegalArgumentException("Atividade já foi avaliada.");
-    }
+        if (activity.getStatus() != Status.PENDING) {
+            throw new IllegalArgumentException("Atividade já foi avaliada.");
+        }
 
-    if (response == null || response.isBlank()) {
-        throw new IllegalArgumentException("Descreva os ajustes necessários.");
-    }
+        if (response == null || response.isBlank()) {
+            throw new IllegalArgumentException("Descreva os ajustes necessários.");
+        }
 
-    boolean updated = activityCatalog.updateActivity(activity, Status.PARTIALLY_DENIED, response);
-    
-    // ✅ CE16 - Envia email de notificação
-    if (updated && activity.getStudent() != null) {
-        EmailUtil.sendActivityPartiallyDeniedEmail(
-            activity.getStudent().getEmail(),
-            activity.getStudent().getName(),
-            activity.getName(),
-            response
-        );
+        boolean updated = activityCatalog.updateActivity(activity, Status.PARTIALLY_DENIED, response);
+
+        if (updated && activity.getStudent() != null) {
+            EmailUtil.sendActivityPartiallyDeniedEmail(
+                    activity.getStudent().getEmail(),
+                    activity.getStudent().getName(),
+                    activity.getName(),
+                    response
+            );
+        }
+
+        return updated;
     }
-    
-    return updated;
-}
 
     // ============================
     // CE07 – APROVAR ATIVIDADE
@@ -194,12 +213,56 @@ public class ActivityController {
             approvedHours = limit;
         }
 
+        List<Activity> approvedActivitiesOfSameType = new ArrayList<>();
+        
+        for (Activity a : activityCatalog.getAllStudentApprovedActivities(activity.getStudent())) {
+            if (a.getActivityType().getName().equalsIgnoreCase(activity.getActivityType().getName())) {
+                approvedActivitiesOfSameType.add(a);
+            }
+        }
+
+        int totalHoursInCategory = 0;
+        for (Activity a : approvedActivitiesOfSameType) {
+            totalHoursInCategory += a.getHours();
+        }
+
+        int hoursToAdd = approvedHours;
+        
+        if (totalHoursInCategory + approvedHours > limit) {
+            hoursToAdd = limit - totalHoursInCategory;
+            
+            if (hoursToAdd <= 0) {
+                throw new IllegalArgumentException(
+                    "O aluno já atingiu o limite de " + limit + 
+                    " horas para atividades do tipo \"" + activity.getActivityType().getName() + "\"."
+                );
+            }
+            
+            approvedHours = hoursToAdd;
+        }
+
         activity.setHours(approvedHours);
 
-        boolean updated = activityCatalog.updateActivity(activity, Status.APPROVED, "Horas aprovadas: " + approvedHours);
+        boolean updated = activityCatalog.updateActivity(
+            activity, 
+            Status.APPROVED, 
+            "Horas aprovadas: " + approvedHours
+        );
 
-        // ✅ CE16 - Envia email de notificação
-        if (updated && activity.getStudent() != null) {
+        if (!updated) {
+            return false;
+        }
+
+        if (studentController != null) {
+            boolean hoursAdded = studentController.addStudentHours(activity.getStudent(), approvedHours);
+            
+            if (!hoursAdded) {
+                activityCatalog.updateActivity(activity, Status.PENDING, "");
+                throw new IllegalArgumentException("Erro ao adicionar horas ao estudante.");
+            }
+        }
+
+        if (activity.getStudent() != null) {
             EmailUtil.sendActivityApprovedEmail(
                     activity.getStudent().getEmail(),
                     activity.getStudent().getName(),
@@ -208,43 +271,49 @@ public class ActivityController {
             );
         }
 
-        return updated;
+        return true;
     }
 
     public boolean verifyActivity(Activity activity) {
         if (activity == null) {
             return false;
         }
-        return activityCatalog.verifyActivity(activity, true); // Marca como verificada
+        return activityCatalog.verifyActivity(activity, true);
     }
 
-    // listar apenas as do aluno logado
     public List<Activity> getByStudent(Student student) {
         List<Activity> result = new ArrayList<>();
         if (student == null) {
             return result;
         }
 
-        for (Activity a : activityCatalog.listActivities()) {
-            if (a.getStudent() != null
-                    && a.getStudent().getEmail().equalsIgnoreCase(student.getEmail())) {
-                result.add(a);
-            }
-        }
+        result = activityCatalog.findAllUserActivity(student);
         return result;
     }
-
-    public List<Activity> getAllStudentApprovedActivities(Student student) {
-        return activityCatalog.getAllStudentApprovedActivities(student);
-    }
-
-    public boolean generateUserReport(String path, List<Activity> activities) {
+    
+    public boolean generateUserReport(Student student, String filePath) {
         try {
-            return PDFUtil.generateUserReport(path, activities);
+            if (student == null || filePath == null || filePath.isBlank()) {
+                return false;
+            }
+
+            List<Activity> approvedActivities =
+                    activityCatalog.getAllStudentApprovedActivities(student);
+
+            if (approvedActivities == null || approvedActivities.isEmpty()) {
+                return false;
+            }
+
+            return PDFUtil.generateUserReport(filePath, approvedActivities);
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<Activity> getAllStudentApprovedActivities(Student student) {
+        return activityCatalog.getAllStudentApprovedActivities(student);
     }
 
 }
