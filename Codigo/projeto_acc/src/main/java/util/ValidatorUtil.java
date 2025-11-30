@@ -26,7 +26,55 @@ public class ValidatorUtil {
     }
 
     public static boolean validateCpf(String cpf) {
-        return cpf != null && cpf.matches("\\d{11}");
+        if (cpf == null) {
+            return false;
+        }
+
+        // Remove caracteres não numéricos (permite formatação como 123.456.789-10)
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        // Verifica se tem 11 dígitos
+        if (cpf.length() != 11) {
+            return false;
+        }
+
+        // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
+        if (cpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+
+        try {
+            // Calcula o primeiro dígito verificador
+            int soma = 0;
+            for (int i = 0; i < 9; i++) {
+                soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
+            }
+            int primeiroDigito = 11 - (soma % 11);
+            if (primeiroDigito >= 10) {
+                primeiroDigito = 0;
+            }
+
+            // Verifica o primeiro dígito
+            if (Character.getNumericValue(cpf.charAt(9)) != primeiroDigito) {
+                return false;
+            }
+
+            // Calcula o segundo dígito verificador
+            soma = 0;
+            for (int i = 0; i < 10; i++) {
+                soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
+            }
+            int segundoDigito = 11 - (soma % 11);
+            if (segundoDigito >= 10) {
+                segundoDigito = 0;
+            }
+
+            // Verifica o segundo dígito
+            return Character.getNumericValue(cpf.charAt(10)) == segundoDigito;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean validateRc(String rc) {
@@ -68,10 +116,6 @@ public class ValidatorUtil {
         return horas;
     }
 
-    // ============================
-    // ✅ VALIDAÇÕES DE ACTIVITY
-    // ============================
-
     /**
      * Valida o nome da atividade
      */
@@ -104,13 +148,13 @@ public class ValidatorUtil {
      * Valida todos os campos de uma atividade
      */
     public static boolean validateActivity(
-            String name, 
-            String description, 
-            Date date, 
+            String name,
+            String description,
+            Date date,
             int hours,
-            Status status, 
+            Status status,
             ActivityType activityType,
-            Student student, 
+            Student student,
             Document document) {
 
         return validateActivityName(name)
@@ -121,6 +165,101 @@ public class ValidatorUtil {
                 && validateActivityType(activityType)
                 && validateStudent(student)
                 && document != null;
+    }
+
+    public static boolean isStudentEmailDuplicated(catalog.StudentCatalog catalog, String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return catalog.findStudentByEmail(email.trim()) != null;
+    }
+
+    /**
+     * Verifica se já existe um estudante com o RA informado
+     */
+    public static boolean isStudentRADuplicated(catalog.StudentCatalog catalog, String ra) {
+        if (ra == null || ra.trim().isEmpty()) {
+            return false;
+        }
+
+        String raTrimmed = ra.trim();
+        for (model.Student s : catalog.getStudents()) {
+            if (s.getRa().equals(raTrimmed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica se já existe um estudante com o CPF informado
+     */
+    public static boolean isStudentCPFDuplicated(catalog.StudentCatalog catalog, String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            return false;
+        }
+
+        String cpfTrimmed = cpf.trim();
+        for (model.Student s : catalog.getStudents()) {
+            if (s.getCpf().equals(cpfTrimmed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica se já existe um supervisor com o email informado
+     */
+    public static boolean isSupervisorEmailDuplicated(catalog.SupervisorCatalog catalog, String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return catalog.findSupervisorByEmail(email.trim()) != null;
+    }
+
+    /**
+     * Verifica se já existe um supervisor com o CPF informado
+     */
+    public static boolean isSupervisorCPFDuplicated(catalog.SupervisorCatalog catalog, String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            return false;
+        }
+
+        String cpfTrimmed = cpf.trim();
+        for (model.Supervisor s : catalog.getSupervisors()) {
+            if (s.getCpf().equals(cpfTrimmed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica se já existe um coordenador com o email informado
+     */
+    public static boolean isCoordinatorEmailDuplicated(catalog.CoordinatorCatalog catalog, String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return catalog.findCoordinatorByEmail(email.trim()) != null;
+    }
+
+    /**
+     * Verifica se já existe um coordenador com o RC informado
+     */
+    public static boolean isCoordinatorRCDuplicated(catalog.CoordinatorCatalog catalog, String rc) {
+        if (rc == null || rc.trim().isEmpty()) {
+            return false;
+        }
+
+        String rcTrimmed = rc.trim();
+        for (model.Coordinator c : catalog.getAll()) {
+            if (c.getRc().equals(rcTrimmed)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

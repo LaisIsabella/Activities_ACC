@@ -1,0 +1,4 @@
+supervisor1@unesp.br
+supervisor2@unesp.br
+fernando@unesp.br
+guilherme-batalhoti@unesp.br

@@ -24,7 +24,6 @@ public class CoordinatorCatalog {
         return added;
     }
 
-    // CE03 - Busca coordenador por e-mail
     public Coordinator findCoordinatorByEmail(String email) {
         return coordinators.stream()
                 .filter(c -> c.getEmail().equalsIgnoreCase(email))

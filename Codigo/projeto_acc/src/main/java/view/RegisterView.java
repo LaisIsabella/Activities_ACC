@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import controller.*;
+import util.ValidatorUtil;
 
 public class RegisterView extends JFrame {
 
@@ -139,51 +140,134 @@ public class RegisterView extends JFrame {
                     case "coordinator" -> {
                         String rc = extra1;
                         success = cc.createCoordinator(name, email, password, rc);
-                    }
-                    case "supervisor" -> {
-                        if (sc.getSupervisorCatalog().findSupervisorByEmail(email) != null) {
-                            JOptionPane.showMessageDialog(this, "Já existe um supervisor com esse e-mail.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+                        if (!success) {
+                            // Dados são válidos mas falhou = duplicidade ou autorização
+                            if (cc.validateCoordinator(name, email, password, rc)) {
+                                // Verifica qual foi o problema
+                                if (ValidatorUtil.isCoordinatorEmailDuplicated(cc.getCoordinatorCatalog(), email)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um coordenador com esse e-mail.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else if (ValidatorUtil.isCoordinatorRCDuplicated(cc.getCoordinatorCatalog(), rc)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um coordenador com esse RC.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    // Se não é duplicidade, é autorização
+                                    JOptionPane.showMessageDialog(this,
+                                            "RC não autorizado para registro como Coordenador.\n\n"
+                                            + "Apenas RCs previamente cadastrados podem se registrar.\n"
+                                            + "Entre em contato com o administrador do sistema.",
+                                            "Erro de Autorização",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                // Dados inválidos
+                                JOptionPane.showMessageDialog(this,
+                                        "Dados inválidos. Verifique:\n"
+                                        + "- Nome não pode estar vazio\n"
+                                        + "- Email deve ser @unesp.br\n"
+                                        + "- Senha: mínimo 8 caracteres, com maiúscula, minúscula, número e especial\n"
+                                        + "- RC deve ter de 1 a 4 dígitos",
+                                        "Erro de Validação",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
                             return;
                         }
-                        success = sc.createSupervisor(name, email, password, extra1);
+                    }
+                    case "supervisor" -> {
+                        String cpf = extra1;
+                        success = sc.createSupervisor(name, email, password, cpf);
+
+                        if (!success) {
+                            if (sc.validateSupervisor(name, email, password, cpf)) {
+                                if (ValidatorUtil.isSupervisorEmailDuplicated(sc.getSupervisorCatalog(), email)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um supervisor com esse e-mail.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else if (ValidatorUtil.isSupervisorCPFDuplicated(sc.getSupervisorCatalog(), cpf)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um supervisor com esse CPF.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Email não autorizado para registro como Supervisor.\n\n"
+                                            + "Apenas emails previamente cadastrados podem se registrar.\n"
+                                            + "Entre em contato com o administrador do sistema.",
+                                            "Erro de Autorização",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this,
+                                        "Dados inválidos. Verifique:\n"
+                                        + "- Nome não pode estar vazio\n"
+                                        + "- Email deve ser @unesp.br\n"
+                                        + "- Senha: mínimo 8 caracteres, com maiúscula, minúscula, número e especial\n"
+                                        + "- CPF deve ser um CPF válido",
+                                        "Erro de Validação",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                            return;
+                        }
                     }
                     case "student" -> {
                         String cpf = extra1;
                         String ra = extra2;
-
-                        if (stc.getStudentCatalog().findStudentByEmail(email) != null) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse e-mail.", "Erro", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                        if (stc.getStudentCatalog().getStudents().stream().anyMatch(s -> s.getCpf().equals(cpf))) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse CPF.", "Erro", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                        if (stc.getStudentCatalog().getStudents().stream().anyMatch(s -> s.getRa().equals(ra))) {
-                            JOptionPane.showMessageDialog(this, "Já existe um aluno com esse RA.", "Erro", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-
-                        if (!stc.validateStudent(name, email, password, cpf, ra)) {
-                            JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-
                         success = stc.createStudent(name, email, password, cpf, ra);
-                    }
 
+                        if (!success) {
+                            if (stc.validateStudent(name, email, password, cpf, ra)) {
+                                if (ValidatorUtil.isStudentEmailDuplicated(stc.getStudentCatalog(), email)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um aluno com esse e-mail.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else if (ValidatorUtil.isStudentCPFDuplicated(stc.getStudentCatalog(), cpf)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um aluno com esse CPF.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else if (ValidatorUtil.isStudentRADuplicated(stc.getStudentCatalog(), ra)) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Já existe um aluno com esse RA.",
+                                            "Erro de Duplicidade",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this,
+                                        "Dados inválidos. Verifique:\n"
+                                        + "- Nome não pode estar vazio\n"
+                                        + "- Email deve ser @unesp.br\n"
+                                        + "- Senha: mínimo 8 caracteres, com maiúscula, minúscula, número e especial\n"
+                                        + "- CPF deve ter 11 dígitos\n"
+                                        + "- RA deve ter 9 dígitos",
+                                        "Erro de Validação",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                            return;
+                        }
+                    }
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Campos numéricos inválidos (RA/RC).", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Campos numéricos inválidos (RA/RC).",
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (success) {
-                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Cadastro realizado com sucesso!",
+                        "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
                 new LoginView(userType, cc, sc, stc, null);
                 dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha no cadastro. Verifique os dados.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 

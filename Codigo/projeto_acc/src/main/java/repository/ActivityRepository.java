@@ -56,13 +56,11 @@ public class ActivityRepository {
             String docPath = p[9];
             Document doc = new Document(docName, docPath);
 
-            // ⚠️ Agora sim: ler isVerified (p[10])
             boolean isVerified = false;
             if (p.length >= 11) {
                 isVerified = Boolean.parseBoolean(p[10]);
             }
 
-            // Criar atividade com isVerified
             Activity a = new Activity(
                     name, desc, date, hours,
                     status, response,
@@ -98,7 +96,7 @@ public class ActivityRepository {
                         + a.getActivityType().getName() + ";"
                         + a.getDocument().getFileName() + ";"
                         + a.getDocument().getFilePath() + ";"
-                        + a.getIsVerified() // novo campo
+                        + a.getIsVerified()
                 );
 
                 bw.newLine();

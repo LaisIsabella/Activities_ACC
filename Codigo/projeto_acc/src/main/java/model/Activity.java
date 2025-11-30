@@ -34,7 +34,7 @@ public class Activity {
         this.activityType = activityType;
         this.student = student;
         this.document = document;
-        this.isVerified = isVerified; // ✅ CORRETO AGORA
+        this.isVerified = isVerified;
     }
 
     public Document getDocument() {

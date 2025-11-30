@@ -1,5 +1,6 @@
 package controller;
 
+import catalog.AuthorizationCatalog;
 import catalog.CoordinatorCatalog;
 import model.Coordinator;
 import util.ValidatorUtil;
@@ -7,9 +8,11 @@ import util.ValidatorUtil;
 public class CoordinatorController {
 
     private CoordinatorCatalog coordinatorCatalog;
+    private AuthorizationCatalog authorizationCatalog;
 
     public CoordinatorController(CoordinatorCatalog coordinatorCatalog) {
         this.coordinatorCatalog = coordinatorCatalog;
+        this.authorizationCatalog = new AuthorizationCatalog();
     }
 
     public CoordinatorCatalog getCoordinatorCatalog() {
@@ -20,7 +23,6 @@ public class CoordinatorController {
         this.coordinatorCatalog = coordinatorCatalog;
     }
 
-
     // Validação dos dados de cadastro (usado no registro)
     public boolean validateCoordinator(String name, String email, String password, String rc) {
         boolean validEmail = ValidatorUtil.validateInstitutionalEmail(email);
@@ -30,7 +32,6 @@ public class CoordinatorController {
 
         return validName && validEmail && validPassword && validRc;
     }
-
 
     // CE03 - Valida formato de e-mail e senha para login
     public boolean validateCoordinatorLogin(String email, String password) {
@@ -62,17 +63,34 @@ public class CoordinatorController {
     }
     
     public boolean createCoordinator(String name, String email, String password, String rc) {
-    // 1. Valida os dados do coordenador
-    boolean validData = validateCoordinator(name, email, password, rc);
+        // 1. Valida os dados do coordenador
+        boolean validData = validateCoordinator(name, email, password, rc);
 
-    if (!validData) {
-        return false;
+        if (!validData) {
+            System.out.println("❌ Dados inválidos para coordenador");
+            return false;
+        }
+
+        // 2. ✅ VERIFICA DUPLICIDADE DE EMAIL
+        if (ValidatorUtil.isCoordinatorEmailDuplicated(coordinatorCatalog, email)) {
+            System.out.println("❌ Email já cadastrado: " + email);
+            return false;
+        }
+
+        // 3. ✅ VERIFICA DUPLICIDADE DE RC
+        if (ValidatorUtil.isCoordinatorRCDuplicated(coordinatorCatalog, rc)) {
+            System.out.println("❌ RC já cadastrado: " + rc);
+            return false;
+        }
+
+        // 4. ✅ VERIFICA SE O RC ESTÁ AUTORIZADO
+        if (!authorizationCatalog.isCoordinatorRCAuthorized(rc)) {
+            System.out.println("❌ RC não autorizado: " + rc);
+            return false;
+        }
+
+        // 5. Cria o objeto Coordinator e adiciona ao catálogo
+        Coordinator coordinator = new Coordinator(name, email, password, rc);
+        return coordinatorCatalog.addCoordinator(coordinator);
     }
-
-    // 2. Cria o objeto Coordinator e adiciona ao catálogo
-    Coordinator coordinator = new Coordinator(name, email, password, rc);
-    return coordinatorCatalog.addCoordinator(coordinator);
-}
-
-
 }

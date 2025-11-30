@@ -41,8 +41,8 @@ public class AddActivityView extends JFrame {
         formPanel.setLayout(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(20, 30, 20, 30),
-            BorderFactory.createLineBorder(new Color(220, 220, 220), 1)
+                BorderFactory.createEmptyBorder(20, 30, 20, 30),
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1)
         ));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -114,7 +114,7 @@ public class AddActivityView extends JFrame {
 
         JButton btnAttach = new JButton("Escolher Arquivo");
         styleSecondaryButton(btnAttach);
-        
+
         lblFileName = new JLabel("Nenhum arquivo selecionado");
         lblFileName.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         lblFileName.setForeground(new Color(120, 120, 120));
@@ -152,6 +152,7 @@ public class AddActivityView extends JFrame {
                 public boolean accept(File f) {
                     return f.isDirectory() || f.getName().toLowerCase().endsWith(".pdf");
                 }
+
                 public String getDescription() {
                     return "Arquivos PDF (*.pdf)";
                 }
@@ -172,39 +173,52 @@ public class AddActivityView extends JFrame {
                 String dateStr = txtDate.getText();
                 String hoursStr = txtHours.getText();
 
-                if (name.isBlank()) throw new IllegalArgumentException("Nome obrigatório.");
-                if (desc.isBlank()) throw new IllegalArgumentException("Descrição obrigatória.");
-                if (!dateStr.matches("\\d{2}/\\d{2}/\\d{4}"))
+                if (name.isBlank()) {
+                    throw new IllegalArgumentException("Nome obrigatório.");
+                }
+                if (desc.isBlank()) {
+                    throw new IllegalArgumentException("Descrição obrigatória.");
+                }
+                if (!dateStr.matches("\\d{2}/\\d{2}/\\d{4}")) {
                     throw new IllegalArgumentException("Data inválida. Use DD/MM/AAAA.");
+                }
 
                 int hours = Integer.parseInt(hoursStr);
-                if (hours <= 0) throw new IllegalArgumentException("Horas devem ser maior que zero.");
+                if (hours <= 0) {
+                    throw new IllegalArgumentException("Horas devem ser maior que zero.");
+                }
 
                 ActivityType type = (ActivityType) comboType.getSelectedItem();
-                if (type == null) throw new IllegalArgumentException("Selecione um tipo de atividade.");
+                if (type == null) {
+                    throw new IllegalArgumentException("Selecione um tipo de atividade.");
+                }
 
-                if (hours > type.getLimit())
+                if (hours > type.getLimit()) {
                     throw new IllegalArgumentException(
-                        "O tipo \"" + type.getName() + "\" permite no máximo " + type.getLimit() + " horas."
+                            "O tipo \"" + type.getName() + "\" permite no máximo " + type.getLimit() + " horas."
                     );
+                }
 
-                if (selectedFile == null)
+                if (selectedFile == null) {
                     throw new IllegalArgumentException("Selecione um arquivo PDF.");
+                }
 
-                if (!selectedFile.getName().toLowerCase().endsWith(".pdf"))
+                if (!selectedFile.getName().toLowerCase().endsWith(".pdf")) {
                     throw new IllegalArgumentException("O arquivo deve ser PDF.");
+                }
 
                 Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
 
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.set(Calendar.MINUTE, 0);
-                cal.set(Calendar.SECOND, 0);
-                cal.set(Calendar.MILLISECOND, 0);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                cal.set(Calendar.MILLISECOND, 999);
                 Date today = cal.getTime();
 
-                if (date.before(today))
-                    throw new IllegalArgumentException("A data não pode ser passada.");
+                if (date.after(today)) {
+                    throw new IllegalArgumentException("A data não pode ser futura.");
+                }
 
                 File destFolder = new File("attachments");
                 destFolder.mkdirs();
@@ -259,8 +273,8 @@ public class AddActivityView extends JFrame {
         textField.setPreferredSize(new Dimension(300, 35));
         textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return textField;
     }
@@ -284,6 +298,7 @@ public class AddActivityView extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(142, 68, 173));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(155, 89, 182));
             }
@@ -303,6 +318,7 @@ public class AddActivityView extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(245, 245, 245));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(Color.WHITE);
             }

@@ -1,5 +1,6 @@
 package controller;
 
+import catalog.AuthorizationCatalog;
 import catalog.SupervisorCatalog;
 import model.Supervisor;
 import util.ValidatorUtil;
@@ -7,9 +8,11 @@ import util.ValidatorUtil;
 public class SupervisorController {
 
     private SupervisorCatalog supervisorCatalog;
+    private AuthorizationCatalog authorizationCatalog;
 
     public SupervisorController(SupervisorCatalog supervisorCatalog) {
         this.supervisorCatalog = supervisorCatalog;
+        this.authorizationCatalog = new AuthorizationCatalog();
     }
 
     public SupervisorCatalog getSupervisorCatalog() {
@@ -68,13 +71,26 @@ public class SupervisorController {
         boolean validData = validateSupervisor(name, email, password, cpf);
 
         if (!validData) {
+            System.out.println("❌ Dados inválidos para supervisor");
             return false;
         }
 
-        // 2. Cria o objeto Supervisor e adiciona ao catálogo
+        if (ValidatorUtil.isSupervisorEmailDuplicated(supervisorCatalog, email)) {
+            System.out.println("❌ Email já cadastrado: " + email);
+            return false;
+        }
+
+        if (ValidatorUtil.isSupervisorCPFDuplicated(supervisorCatalog, cpf)) {
+            System.out.println("❌ CPF já cadastrado: " + cpf);
+            return false;
+        }
+
+        if (!authorizationCatalog.isSupervisorEmailAuthorized(email)) {
+            System.out.println("❌ Email não autorizado: " + email);
+            return false;
+        }
+
         Supervisor supervisor = new Supervisor(name, email, password, cpf);
         return supervisorCatalog.addSupervisor(supervisor);
     }
-
-
 }

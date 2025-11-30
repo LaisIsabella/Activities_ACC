@@ -23,7 +23,6 @@ public class ActivityController {
         this.studentController = studentController;
     }
 
-    // CE11 – criar atividade
     public boolean createActivity(
             String name,
             String description,
@@ -90,14 +89,12 @@ public class ActivityController {
             return false;
         }
 
-        // Atualiza status para DENIED
         boolean updated = activityCatalog.updateActivity(activity, Status.DENIED, response);
 
         if (!updated) {
             return false;
         }
 
-        // ✅ Envia EMAIL específico de negação pelo supervisor
         if (activity.getStudent() != null) {
             EmailUtil.sendActivityDeniedBySupervisorEmail(
                     activity.getStudent().getEmail(),
@@ -110,16 +107,12 @@ public class ActivityController {
         return true;
     }
 
-    // ============================
-    // CE12 – EXCLUIR ATIVIDADE
-    // ============================
     public boolean deleteActivity(Activity activity) {
         if (activity == null) {
             return false;
         }
 
         if (!canDeleteActivity(activity)) {
-            // Mensagem de erro específica baseada no motivo
             if (activity.getStatus() != Status.PENDING) {
                 throw new IllegalArgumentException(
                         "Não é possível excluir esta atividade.\n"
@@ -136,7 +129,6 @@ public class ActivityController {
             }
         }
 
-        // ✅ Todas as validações passaram
         return activityCatalog.deleteActivity(activity);
     }
 
@@ -161,9 +153,6 @@ public class ActivityController {
         };
     }
 
-    // ============================
-    // CE05 – NEGAR ATIVIDADE
-    // ============================
     public boolean denyActivity(Activity activity, String response) {
 
         if (activity.getStatus() != Status.PENDING) {
@@ -188,9 +177,6 @@ public class ActivityController {
         return updated;
     }
 
-    // ============================
-    // CE06 – NEGAR PARCIALMENTE
-    // ============================
     public boolean partiallyDenyActivity(Activity activity, String response) {
 
         if (activity.getStatus() != Status.PENDING) {
@@ -215,9 +201,6 @@ public class ActivityController {
         return updated;
     }
 
-    // ============================
-    // CE07 – APROVAR ATIVIDADE
-    // ============================
     public boolean approveActivity(Activity activity, int approvedHours) {
 
         if (activity.getStatus() != Status.PENDING) {

@@ -32,7 +32,7 @@ public class ActivityCatalog {
             return false;
         }
         activities.add(activity);
-        repo.saveAll(activities);         // persiste
+        repo.saveAll(activities);
         return true;
     }
 
@@ -59,7 +59,7 @@ public class ActivityCatalog {
     }
 
     public List<Activity> listActivities() {
-        return activities; // retorna todas
+        return activities;
     }
 
     public boolean updateActivity(Activity activity, Status status, String response) {
@@ -72,17 +72,6 @@ public class ActivityCatalog {
 
         repo.saveAll(activities);
         return true;
-    }
-
-    public List<Activity> findForApproval() {//esse metodo recebe por parametro Activitie
-        List<Activity> result = new ArrayList<>();
-
-        for (Activity a : activities) {
-            if (a.getStatus() == Status.PENDING) {
-                result.add(a);
-            }
-        }
-        return result;
     }
 
     public boolean verifyActivity(Activity activity, boolean isVerified) {

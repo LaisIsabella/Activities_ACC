@@ -25,10 +25,29 @@ public class StudentController {
         boolean validData = validateStudent(name, email, password, cpf, ra);
 
         if (!validData) {
+            System.out.println("❌ Dados inválidos para estudante");
             return false;
         }
 
-        // 2. Cria o objeto Student e adiciona ao catálogo
+        // 2. ✅ VERIFICA DUPLICIDADE DE EMAIL
+        if (ValidatorUtil.isStudentEmailDuplicated(studentCatalog, email)) {
+            System.out.println("❌ Email já cadastrado: " + email);
+            return false;
+        }
+
+        // 3. ✅ VERIFICA DUPLICIDADE DE CPF
+        if (ValidatorUtil.isStudentCPFDuplicated(studentCatalog, cpf)) {
+            System.out.println("❌ CPF já cadastrado: " + cpf);
+            return false;
+        }
+
+        // 4. ✅ VERIFICA DUPLICIDADE DE RA
+        if (ValidatorUtil.isStudentRADuplicated(studentCatalog, ra)) {
+            System.out.println("❌ RA já cadastrado: " + ra);
+            return false;
+        }
+
+        // 5. Cria o objeto Student e adiciona ao catálogo
         Student student = new Student(name, email, password, cpf, ra);
         return studentCatalog.addStudent(student);
     }
@@ -90,5 +109,4 @@ public class StudentController {
         studentCatalog.updateStudent(student);
         return true;
     }
-
 }

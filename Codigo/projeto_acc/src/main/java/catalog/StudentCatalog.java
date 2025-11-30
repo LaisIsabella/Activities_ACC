@@ -11,13 +11,13 @@ public class StudentCatalog {
 
     public StudentCatalog() {
         this.repo = new StudentRepository();
-        this.students = repo.loadAll(); // ⬅️ agora carrega do TXT
+        this.students = repo.loadAll();
     }
 
     public boolean addStudent(Student student) {
         if (student != null) {
             students.add(student);
-            repo.saveAll(students); // ⬅️ agora salva no TXT
+            repo.saveAll(students);
             return true;
         }
         return false;
