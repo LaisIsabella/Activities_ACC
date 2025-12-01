@@ -1,0 +1,4 @@
+lais.isabella@unesp.br;Teste;adsas;29/11/2025;10;APPROVED;Horas aprovadas: 10;Pesquisa;relatorio_221253041.pdf;C:\Activities_ACC\Codigo\projeto_acc\attachments\1764447538455_relatorio_221253041.pdf;true
+lais.isabella@unesp.br;Não sera exxcluida;sasa;29/11/2025;6;PENDING;;Pesquisa;c11.pdf;C:\Activities_ACC\Codigo\projeto_acc\attachments\1764448693447_c11.pdf;true
+lais.isabella@unesp.br;outra q vai ser negada;asasd;29/11/2025;3;DENIED;o aluno anexou a imagem de um cachorro;Pesquisa;Laís Isabella Santos Souza.pdf;C:\Activities_ACC\Codigo\projeto_acc\attachments\1764448796806_Laís Isabella Santos Souza.pdf;false
+lais.isabella@unesp.br;testee;sdbisjabdi;12/01/2022;3;PENDING;;Pesquisa;relatorio_221253041.pdf;C:\Activities_ACC\Codigo\projeto_acc\attachments\1764512428702_relatorio_221253041.pdf;false

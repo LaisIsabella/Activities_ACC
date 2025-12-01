@@ -5,6 +5,27 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.7] - 30-11-2025
+### Adicionado
+
+### Alterado
+- ACC-?? **PATCH** Ajustes Diagramas de Colaboração para Caso e Uso Registrar-se
+
+### Corrigido
+
+---
+
+## [3.0.6] - 28-11-2025
+### Adicionado
+- ACC-68 **MINOR** Implementação dos casos de uso 13,14,20
+
+### Alterado
+
+### Corrigido
+
+---
+
+### Alterado
 ## [3.0.5] - 25-11-2025
 ### Adicionado
 - ACC-67 **MINOR** Diagrama de Sequencia UC-13
@@ -22,6 +43,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - ACC-67 **PATCH** Diagrama de Classes atualizado
 
 ### Corrigido
+
+---
+
+## [3.0.5] - 24-11-2025
+### Adicionado
+- ACC-68 **MINOR** Implementação dos casos de uso 4, 5, 6, 7, 19
 
 ---
 
