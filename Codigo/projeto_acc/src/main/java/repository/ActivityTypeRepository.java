@@ -15,20 +15,20 @@ public class ActivityTypeRepository {
 
         if (!file.exists()) {
             // cria tipos padrão
-            list.add(new ActivityType("Extensão", 10));
-            list.add(new ActivityType("Participação de Atividade Esportiva", 5));
-            list.add(new ActivityType("Estágio Registrado na UNESP", 10));
+            list.add(new ActivityType("Extensao", 10));
+            list.add(new ActivityType("Participacao de Atividade Esportiva", 5));
+            list.add(new ActivityType("Estagio Registrado na UNESP", 10));
             list.add(new ActivityType("Monitoria", 20));
-            list.add(new ActivityType("Participação na SECOMPP", 40));
+            list.add(new ActivityType("Participacao na SECOMPP", 40));
             list.add(new ActivityType("Ministrar Minicurso/Palestra", 16));
             list.add(new ActivityType("Visita Tecnica", 40));
             list.add(new ActivityType("Curso Online", 10));
-            list.add(new ActivityType("Participação na EJCOMP", 10));
-            list.add(new ActivityType("Participação no CACiC", 10));
-            list.add(new ActivityType("Apresentação em Congresso", 20));
-            list.add(new ActivityType("Publicação de Artigo em Periódico", 10));
-            list.add(new ActivityType("Participação em eventos (exceto SECOMPP)", 10));
-            list.add(new ActivityType("Programa de Formação Complementar (PFC)", 120));
+            list.add(new ActivityType("Participacao na EJCOMP", 10));
+            list.add(new ActivityType("Participacao no CACiC", 10));
+            list.add(new ActivityType("Apresentacao em Congresso", 20));
+            list.add(new ActivityType("Publicacao de Artigo em Periodico", 10));
+            list.add(new ActivityType("Participacao em eventos (exceto SECOMPP)", 10));
+            list.add(new ActivityType("Programa de Formacao Complementar (PFC)", 120));
             
             saveAll(list);
             return list;

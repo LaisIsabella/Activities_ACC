@@ -4,10 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import controller.*;
 import util.ValidatorUtil;
+import catalog.ActivityCatalog;
+import repository.ActivityTypeRepository;
 
 public class RegisterView extends JFrame {
 
+    private ActivityController activityController;
+
     public RegisterView(String userType, CoordinatorController cc, SupervisorController sc, StudentController stc) {
+
+        // ✅ CORREÇÃO: Criar ActivityController aqui também
+        ActivityCatalog activityCatalog = new ActivityCatalog(
+                stc.getStudentCatalog(),
+                new ActivityTypeRepository()
+        );
+        this.activityController = new ActivityController(activityCatalog);
+        this.activityController.setStudentController(stc);
 
         String title = switch (userType) {
             case "coordinator" ->
@@ -45,7 +57,7 @@ public class RegisterView extends JFrame {
         JLabel lblTitle = new JLabel(icon + "  " + title, SwingConstants.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitle.setForeground(Color.WHITE);
-        headerPanel.add(lblTitle);
+        headerPanel. add(lblTitle);
 
         // ====== PAINEL CENTRAL (FORMULÁRIO) ======
         JPanel formPanel = new JPanel();
@@ -54,7 +66,7 @@ public class RegisterView extends JFrame {
         formPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints. HORIZONTAL;
         gbc.insets = new Insets(8, 0, 8, 0);
         gbc.gridx = 0;
 
@@ -63,7 +75,7 @@ public class RegisterView extends JFrame {
         formPanel.add(createLabel("Nome completo"), gbc);
         JTextField txtName = createTextField();
         gbc.gridy = 1;
-        formPanel.add(txtName, gbc);
+        formPanel. add(txtName, gbc);
 
         // Email
         gbc.gridy = 2;
@@ -129,10 +141,10 @@ public class RegisterView extends JFrame {
         // ====== AÇÕES ======
         btnRegister.addActionListener(e -> {
             String name = txtName.getText();
-            String email = txtEmail.getText();
+            String email = txtEmail. getText();
             String password = new String(txtPassword.getPassword());
             String extra1 = txtExtra1.getText();
-            String extra2 = txtExtra2.getText();
+            String extra2 = txtExtra2. getText();
             boolean success = false;
 
             try {
@@ -141,12 +153,12 @@ public class RegisterView extends JFrame {
                         String rc = extra1;
                         success = cc.createCoordinator(name, email, password, rc);
 
-                        if (!success) {
+                        if (! success) {
                             // Dados são válidos mas falhou = duplicidade ou autorização
                             if (cc.validateCoordinator(name, email, password, rc)) {
                                 // Verifica qual foi o problema
-                                if (ValidatorUtil.isCoordinatorEmailDuplicated(cc.getCoordinatorCatalog(), email)) {
-                                    JOptionPane.showMessageDialog(this,
+                                if (ValidatorUtil.isCoordinatorEmailDuplicated(cc. getCoordinatorCatalog(), email)) {
+                                    JOptionPane. showMessageDialog(this,
                                             "Já existe um coordenador com esse e-mail.",
                                             "Erro de Duplicidade",
                                             JOptionPane.ERROR_MESSAGE);
@@ -182,14 +194,14 @@ public class RegisterView extends JFrame {
                         String cpf = extra1;
                         success = sc.createSupervisor(name, email, password, cpf);
 
-                        if (!success) {
+                        if (! success) {
                             if (sc.validateSupervisor(name, email, password, cpf)) {
-                                if (ValidatorUtil.isSupervisorEmailDuplicated(sc.getSupervisorCatalog(), email)) {
+                                if (ValidatorUtil.isSupervisorEmailDuplicated(sc. getSupervisorCatalog(), email)) {
                                     JOptionPane.showMessageDialog(this,
                                             "Já existe um supervisor com esse e-mail.",
                                             "Erro de Duplicidade",
                                             JOptionPane.ERROR_MESSAGE);
-                                } else if (ValidatorUtil.isSupervisorCPFDuplicated(sc.getSupervisorCatalog(), cpf)) {
+                                } else if (ValidatorUtil.isSupervisorCPFDuplicated(sc. getSupervisorCatalog(), cpf)) {
                                     JOptionPane.showMessageDialog(this,
                                             "Já existe um supervisor com esse CPF.",
                                             "Erro de Duplicidade",
@@ -200,7 +212,7 @@ public class RegisterView extends JFrame {
                                             + "Apenas emails previamente cadastrados podem se registrar.\n"
                                             + "Entre em contato com o administrador do sistema.",
                                             "Erro de Autorização",
-                                            JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane. ERROR_MESSAGE);
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(this,
@@ -210,7 +222,7 @@ public class RegisterView extends JFrame {
                                         + "- Senha: mínimo 8 caracteres, com maiúscula, minúscula, número e especial\n"
                                         + "- CPF deve ser um CPF válido",
                                         "Erro de Validação",
-                                        JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane. ERROR_MESSAGE);
                             }
                             return;
                         }
@@ -220,10 +232,10 @@ public class RegisterView extends JFrame {
                         String ra = extra2;
                         success = stc.createStudent(name, email, password, cpf, ra);
 
-                        if (!success) {
+                        if (! success) {
                             if (stc.validateStudent(name, email, password, cpf, ra)) {
                                 if (ValidatorUtil.isStudentEmailDuplicated(stc.getStudentCatalog(), email)) {
-                                    JOptionPane.showMessageDialog(this,
+                                    JOptionPane. showMessageDialog(this,
                                             "Já existe um aluno com esse e-mail.",
                                             "Erro de Duplicidade",
                                             JOptionPane.ERROR_MESSAGE);
@@ -263,16 +275,16 @@ public class RegisterView extends JFrame {
 
             if (success) {
                 JOptionPane.showMessageDialog(this,
-                        "Cadastro realizado com sucesso!",
+                        "Cadastro realizado com sucesso! ",
                         "Sucesso",
-                        JOptionPane.INFORMATION_MESSAGE);
-                new LoginView(userType, cc, sc, stc, null);
+                        JOptionPane. INFORMATION_MESSAGE);
+                new LoginView(userType, cc, sc, stc, activityController);  // ✅ CORREÇÃO: passa activityController
                 dispose();
             }
         });
 
         btnCancel.addActionListener(e -> {
-            new LoginView(userType, cc, sc, stc, null);
+            new LoginView(userType, cc, sc, stc, activityController);  // ✅ CORREÇÃO: passa activityController
             dispose();
         });
 
@@ -315,7 +327,7 @@ public class RegisterView extends JFrame {
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setForeground(Color.WHITE);
         button.setBackground(color);
-        button.setFocusPainted(false);
+        button. setFocusPainted(false);
         button.setBorderPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
