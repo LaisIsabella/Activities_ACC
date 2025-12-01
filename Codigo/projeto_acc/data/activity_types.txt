@@ -1,14 +1,14 @@
-Extens�o;50
-Participa��o de Atividade Esportiva;5
-Est�gio Registrado na UNESP;10
+Extensao;10
+Participacao de Atividade Esportiva;5
+Estagio Registrado na UNESP;10
 Monitoria;20
-Participa��o na SECOMPP;40
+Participacao na SECOMPP;40
 Ministrar Minicurso/Palestra;16
 Visita Tecnica;40
-Curso Online;10
-Participa��o na EJCOMP;10
-Participa��o no CACiC;10
-Apresenta��o em Congresso;20
-Publica��o de Artigo em Peri�dico;10
-Participa��o em eventos (exceto SECOMPP);10
-Programa de Forma��o Complementar (PFC);10
+Curso Online;15
+Participacao na EJCOMP;10
+Participacao no CACiC;10
+Apresentacao em Congresso;20
+Publicacao de Artigo em Periodico;10
+Participacao em eventos (exceto SECOMPP);10
+Programa de Formacao Complementar (PFC);120

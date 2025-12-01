@@ -1,10 +1,10 @@
 package catalog;
 
-import model.Activity;
+import model. Activity;
 import repository.ActivityRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util. ArrayList;
+import java.util. List;
 import model.ActivityType;
 import model.Status;
 import model.Student;
@@ -14,9 +14,15 @@ public class ActivityCatalog {
 
     private List<Activity> activities;
     private final ActivityRepository repo;
+    
+    // ✅ CORREÇÃO: Guardar referências para poder recarregar
+    private final StudentCatalog studentCatalog;
+    private final ActivityTypeRepository typeRepo;
 
     public ActivityCatalog(StudentCatalog sc, ActivityTypeRepository typeRepo) {
         this.repo = new ActivityRepository();
+        this.studentCatalog = sc;  // ✅ Salva a referência
+        this.typeRepo = typeRepo;   // ✅ Salva a referência
         this.activities = repo.loadAll(sc, typeRepo);
     }
 
@@ -40,7 +46,7 @@ public class ActivityCatalog {
         List<Activity> result = new ArrayList<>();
         for (Activity a : activities) {
             if (a.getStudent() != null
-                    && a.getStudent().getEmail().equalsIgnoreCase(student.getEmail())) {
+                    && a. getStudent().getEmail().equalsIgnoreCase(student.getEmail())) {
                 result.add(a);
             }
         }
@@ -53,7 +59,7 @@ public class ActivityCatalog {
         }
         boolean removed = activities.remove(activity);
         if (removed) {
-            repo.saveAll(activities);
+            repo. saveAll(activities);
         }
         return removed;
     }
@@ -85,6 +91,11 @@ public class ActivityCatalog {
 
     public void save() {
         repo.saveAll(activities);
+    }
+
+    // ✅ NOVO MÉTODO: Recarrega as atividades do arquivo
+    public void reloadActivities() {
+        this.activities = repo.loadAll(studentCatalog, typeRepo);
     }
 
     public List<Activity> getAllStudentApprovedActivities(Student student) {

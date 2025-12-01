@@ -189,9 +189,14 @@ public class AddActivityView extends JFrame {
                 }
 
                 ActivityType type = (ActivityType) comboType.getSelectedItem();
+
+                // ✅ VALIDAÇÃO CRÍTICA ADICIONADA
                 if (type == null) {
                     throw new IllegalArgumentException("Selecione um tipo de atividade.");
                 }
+
+                // ✅ DEBUG (remova depois de testar)
+                System.out.println("DEBUG - Tipo selecionado: " + type.getName() + " (Limite: " + type.getLimit() + ")");
 
                 if (hours > type.getLimit()) {
                     throw new IllegalArgumentException(
@@ -228,6 +233,12 @@ public class AddActivityView extends JFrame {
 
                 Document doc = new Document(selectedFile.getName(), destFile.getAbsolutePath());
 
+                // ✅ DEBUG FINAL (remova depois de testar)
+                System.out.println("DEBUG - Antes de criar atividade:");
+                System.out.println("  Nome: " + name);
+                System.out.println("  Tipo: " + (type != null ? type.getName() : "NULL! "));
+                System.out.println("  Student: " + (student != null ? student.getName() : "NULL!"));
+
                 boolean ok = controller.createActivity(name, desc, date, hours, Status.PENDING, type, student, doc);
 
                 if (!ok) {
@@ -240,6 +251,7 @@ public class AddActivityView extends JFrame {
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();  // ✅ Para ver a stack trace completa
             }
         });
 

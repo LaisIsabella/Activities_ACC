@@ -1,1 +1,2 @@
 Celso Olivette;supervisor2@unesp.br;Teste123!;077.423.360-57
+TesteFernando;fernando@unesp.br;Receba123@;07057023839

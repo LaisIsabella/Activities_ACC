@@ -296,6 +296,9 @@ public class ActivityController {
                 return false;
             }
 
+            // Recarrega as atividades do arquivo antes de gerar o relatório
+            activityCatalog.reloadActivities();
+
             List<Activity> approvedActivities
                     = activityCatalog.getAllStudentApprovedActivities(student);
 
