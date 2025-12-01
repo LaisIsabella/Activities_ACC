@@ -1,4 +1,2 @@
 Lais Sousa;lais.isabella@unesp.br;Lais123!;44711266879;221253041
-Aluno Vï¿½lido;aluno.valido@unesp.br;Senha@123;98765432100;987654321
-Teste;testeeee@unesp.br;Teste123!;31357428812;111222222
-Paulo Celso dos Santos Júnior;p.santos-junior@unesp.br;Receba123@;44758750807;231254024
+Paulo Celso dos Santos Jï¿½nior;p.santos-junior@unesp.br;Receba123@;44758750807;231254024
